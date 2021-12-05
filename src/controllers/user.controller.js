@@ -25,6 +25,10 @@ exports.createUser = async (req, res) => {
       });
     }
 
+    const photo = {};
+    if (req.files) {
+    }
+
     const user = await User.create({
       name,
       email,
