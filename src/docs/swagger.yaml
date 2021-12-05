@@ -58,3 +58,183 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 61a24ff7ca438a5a347730f0
+        name:
+          type: string
+          example: Abc Xyz
+        email:
+          type: string
+          example: email@dev.com
+        role:
+          type: string
+          enum:
+            - user
+            - admin
+            - manager
+          example: user
+        isVerifiedUser:
+          type: boolean
+          example: false
+        photo:
+          type: object
+          properties:
+            secureUrl:
+              type: string
+              example: ywz.png
+            publicId:
+              type: string
+              example: photoId
+        accountCreatedUsing:
+          type: string
+          enum:
+            - local
+            - google
+            - facebook
+            - github
+          example: local
+        google:
+          type: object
+          properties:
+            isGoogle:
+              type: boolean
+              example: false
+            googleId:
+              type: string
+              example: googleTestId
+        facebook:
+          type: object
+          properties:
+            isFacebook:
+              type: boolean
+              example: false
+            facebookId:
+              type: string
+              example: facebookTestId
+        github:
+          type: object
+          properties:
+            isGithub:
+              type: boolean
+              example: false
+            githubId:
+              type: string
+              example: githubTestId
+        confirmEmailToken:
+          type: string
+        confirmEmailTokenExpiry:
+          type: number
+        resetPasswordToken:
+          type: string
+        resetPasswordTokenExpiry:
+          type: number
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+
+paths:
+  /users/signup:
+    post:
+      tags:
+        - User
+      summary: Creates a new user, photo is optional but name, email and password are required
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                  required: true
+                  example: Ram Jain
+                  minLength: 1
+                  maxLength: 50
+                  description: The name must be less than 50 characters
+                email:
+                  type: string
+                  required: true
+                  format: email
+                  example: test@dev.com
+                  minLength: 1
+                  maxLength: 50
+                  description: The email must be less than 50 characters
+                password:
+                  type: string
+                  required: true
+                  format: password
+                  example: 1234567
+                  min: 7
+                  description: A password must contain at least 7 characters
+                photo:
+                  type: file
+                  format: binary
+                  description: The photo is optional but user can upload an image
+      responses:
+        201:
+          description: A user has been created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWNjYmYzNTlhY2RmYzk3YzVhOTNiNSIsImlhdCI6MTYzODcxNDM1NSwiZXhwIjoxNjM4ODg3MTU1fQ.LITLBN6c4WKseKPXOUNdsJmZsbffFonTdYWDmxmDsro
+                  user:
+                    type: object
+                    $ref: "#/components/schemas/User"
+        400:
+          description: bad request, name, email and password are required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: name, email and password are required
+        401:
+          description: bad request, User already exists, please login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: User already exists, please login
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error messages

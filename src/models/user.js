@@ -97,5 +97,10 @@ userSchema.methods.getJwtToken = function () {
   });
 };
 
+// Comparing passwords
+userSchema.methods.isValidPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
 // Exporting Model
 module.exports = mongoose.model("User", userSchema);
