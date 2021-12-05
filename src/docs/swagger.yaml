@@ -1,0 +1,60 @@
+openapi: "3.0.0"
+info:
+  title: Badjatya Store
+  description: A Back-end REST API project for an E-Commerce built using NodeJS, ExpressJS and MongoDB as database of the project.
+  version: "1.0.0"
+  contact:
+    email: "architj240@gmail.com"
+    url: "https://badjatya.github.io"
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: "{Protocol}://localhost:{Port}/api/{Version}"
+    description: Local version of the API
+    variables:
+      Protocol:
+        enum:
+          - http
+          - https
+        default: http
+      Port:
+        enum:
+          - 5000
+          - 6000
+          - 7000
+          - 8000
+        default: 5000
+      Version:
+        enum:
+          - v1
+          - v2
+        default: v1
+
+tags:
+  - name: User
+    description: Everything about User
+    externalDocs:
+      description: Find out more about user at
+      url: http://swagger.io
+  - name: Product
+    description: Everything about Product
+    externalDocs:
+      description: Find out more about Product of badjatya-store at
+      url: http://swagger.io
+  - name: Order
+    description: Everything about Order
+    externalDocs:
+      description: Find out more about the Order at
+      url: http://swagger.io
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
