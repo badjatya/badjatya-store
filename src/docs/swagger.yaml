@@ -238,3 +238,89 @@ paths:
                   message:
                     type: string
                     example: error messages
+
+  /users/login:
+    post:
+      tags:
+        - User
+      summary: A user who have an account can login, using email and password
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  required: true
+                  format: email
+                  example: test@dev.com
+                  minLength: 1
+                  maxLength: 50
+                  description: Enter the password you have used while signup
+                password:
+                  type: string
+                  required: true
+                  format: password
+                  example: 1234567
+                  min: 7
+                  description: Enter the password you have used while signup
+      responses:
+        200:
+          description: success, user successfully logged in also cookie added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWNjYmYzNTlhY2RmYzk3YzVhOTNiNSIsImlhdCI6MTYzODcxNDM1NSwiZXhwIjoxNjM4ODg3MTU1fQ.LITLBN6c4WKseKPXOUNdsJmZsbffFonTdYWDmxmDsro
+                  user:
+                    type: object
+                    $ref: "#/components/schemas/User"
+        400:
+          description: bad request, name, email and password are required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: name, email and password are required
+        401:
+          description: bad request, User already exists, please login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: User already exists, please login
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error messages
