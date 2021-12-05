@@ -10,19 +10,12 @@ const YAML = require("yamljs");
 const swaggerDocument = YAML.load("./src/docs/swagger.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const user = {
-  name: "Archit",
-  email: "email1@dev.com",
-  password: "1234567",
-  accountCreatedUsing: "local",
-};
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const User = require("./src/models/user");
-
-// (async () => {
-//   const userNew = await User.create(user);
-//   console.log(userNew);
-// })();
+// Routes
+app.use("/api/v1/users", require("./src/routes/user.router"));
 
 // Exporting app
 module.exports = app;
