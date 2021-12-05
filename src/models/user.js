@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 // Library
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
   {
@@ -88,6 +89,13 @@ userSchema.pre("save", async function (next) {
   }
   next();
 });
+
+// Generating json web token
+userSchema.methods.getJwtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRY,
+  });
+};
 
 // Exporting Model
 module.exports = mongoose.model("User", userSchema);

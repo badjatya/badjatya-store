@@ -5,24 +5,55 @@ const User = require("../models/user");
 
 // Signup
 exports.createUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  try {
+    const { name, email, password } = req.body;
 
-  if (!(name || email || password)) {
-    return res.status(400).json({
-      status: "failed",
-      message: "name, email and password are required",
+    // Checking all the filed are present
+    if (!(name || email || password)) {
+      return res.status(400).json({
+        status: "failed",
+        message: "name, email and password are required",
+      });
+    }
+
+    // Checking the user already exists
+    const isUserAlreadyExist = await User.findOne({ email });
+    if (isUserAlreadyExist) {
+      return res.status(401).json({
+        status: "fail",
+        message: "User already exists, please login",
+      });
+    }
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+      accountCreatedUsing: "local",
+    });
+
+    const token = user.getJwtToken();
+
+    // Hiding password
+    user.password = undefined;
+
+    // Sending cookie
+    res.cookie("token", token, {
+      expires: new Date(
+        Date.now() + process.env.COOKIE_TIME * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+    });
+
+    res.status(201).json({
+      status: "success",
+      token,
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
     });
   }
-
-  const user = await User.create({
-    name,
-    email,
-    password,
-    accountCreatedUsing: "local",
-  });
-
-  res.status(201).json({
-    status: "success",
-    user,
-  });
 };
