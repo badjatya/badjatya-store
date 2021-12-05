@@ -1,6 +1,9 @@
 // Model
 const User = require("../models/user");
 
+// Lib
+const cloudinary = require("cloudinary");
+
 //** */ Controllers
 
 // Signup
@@ -25,36 +28,77 @@ exports.createUser = async (req, res) => {
       });
     }
 
-    const photo = {};
+    // Checking if photo exists
     if (req.files) {
+      const result = await cloudinary.v2.uploader.upload(
+        req.files.photo.tempFilePath,
+        {
+          folder: "badjatya-store/users",
+          width: 150,
+          crop: "scale",
+        }
+      );
+
+      const photo = {
+        secureUrl: result.secure_url,
+        publicId: result.public_id,
+      };
+
+      const user = await User.create({
+        name,
+        email,
+        password,
+        accountCreatedUsing: "local",
+        photo,
+      });
+
+      const token = user.getJwtToken();
+
+      // Hiding password
+      user.password = undefined;
+
+      // Sending cookie
+      res.cookie("token", token, {
+        expires: new Date(
+          Date.now() + process.env.COOKIE_TIME * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true,
+      });
+
+      res.status(201).json({
+        status: "success",
+        token,
+        user,
+      });
+    } else {
+      const user = await User.create({
+        name,
+        email,
+        password,
+        accountCreatedUsing: "local",
+      });
+
+      const token = user.getJwtToken();
+
+      // Hiding password
+      user.password = undefined;
+
+      // Sending cookie
+      res.cookie("token", token, {
+        expires: new Date(
+          Date.now() + process.env.COOKIE_TIME * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true,
+      });
+
+      res.status(201).json({
+        status: "success",
+        token,
+        user,
+      });
     }
-
-    const user = await User.create({
-      name,
-      email,
-      password,
-      accountCreatedUsing: "local",
-    });
-
-    const token = user.getJwtToken();
-
-    // Hiding password
-    user.password = undefined;
-
-    // Sending cookie
-    res.cookie("token", token, {
-      expires: new Date(
-        Date.now() + process.env.COOKIE_TIME * 24 * 60 * 60 * 1000
-      ),
-      httpOnly: true,
-    });
-
-    res.status(201).json({
-      status: "success",
-      token,
-      user,
-    });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       status: "error",
       message: error.message,
