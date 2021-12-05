@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 // Library
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -79,6 +80,14 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Hashing password
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
 
 // Exporting Model
 module.exports = mongoose.model("User", userSchema);
