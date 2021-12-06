@@ -109,5 +109,21 @@ userSchema.methods.getJwtLoginToken = function () {
   return token;
 };
 
+// Getting jwt confirm email token
+userSchema.methods.getJwtConfirmEmailToken = function () {
+  const token = jwt.sign(
+    {
+      id: this._id,
+    },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: process.env.JWT_EXPIRY,
+    }
+  );
+
+  this.confirmEmailToken = token;
+  return token;
+};
+
 // Exporting Model
 module.exports = mongoose.model("User", userSchema);
