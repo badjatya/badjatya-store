@@ -4,7 +4,8 @@ const User = require("../models/user");
 // Lib
 const cloudinary = require("cloudinary");
 
-//** */ Controllers
+// Utils
+const emailSender = require("../utils/emailSender");
 
 // Signup
 exports.createUser = async (req, res) => {
@@ -44,6 +45,7 @@ exports.createUser = async (req, res) => {
         publicId: result.public_id,
       };
 
+      // Creating User
       const user = await User.create({
         name,
         email,
@@ -52,23 +54,23 @@ exports.createUser = async (req, res) => {
         photo,
       });
 
-      const token = user.getJwtToken();
+      const emailToken = user.getEmailVerificationToken();
 
-      // Hiding password
-      user.password = undefined;
-
-      // Sending cookie
-      res.cookie("token", token, {
-        expires: new Date(
-          Date.now() + process.env.COOKIE_TIME * 24 * 60 * 60 * 1000
-        ),
-        httpOnly: true,
+      // Sending confirm email address mail
+      const myUrl = `${req.protocol}://${req.get(
+        "host"
+      )}/api/v1/users/email/confirm/${emailToken}`;
+      const message = `Copy paste this link in your URL and hit enter \n\n ${myUrl}`;
+      emailSender({
+        email,
+        subject: `Badjatya Store, ${user.name} reset password`,
+        message,
       });
 
       res.status(201).json({
         status: "success",
-        token,
-        user,
+        message:
+          "Verification email sent at ur email, please verify within 20min",
       });
     } else {
       const user = await User.create({
@@ -78,23 +80,23 @@ exports.createUser = async (req, res) => {
         accountCreatedUsing: "local",
       });
 
-      const token = user.getJwtToken();
+      const emailToken = user.getEmailVerificationToken();
 
-      // Hiding password
-      user.password = undefined;
-
-      // Sending cookie
-      res.cookie("token", token, {
-        expires: new Date(
-          Date.now() + process.env.COOKIE_TIME * 24 * 60 * 60 * 1000
-        ),
-        httpOnly: true,
+      // Sending confirm email address mail
+      const myUrl = `${req.protocol}://${req.get(
+        "host"
+      )}/api/v1/users/email/confirm/${emailToken}`;
+      const message = `Copy paste this link in your URL and hit enter \n\n ${myUrl}`;
+      emailSender({
+        email,
+        subject: `Badjatya Store, ${user.name} reset password`,
+        message,
       });
 
       res.status(201).json({
         status: "success",
-        token,
-        user,
+        message:
+          "Verification email sent at ur email, please verify within 20min",
       });
     }
   } catch (error) {

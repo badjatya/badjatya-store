@@ -73,9 +73,7 @@ const userSchema = new mongoose.Schema(
       githubId: String,
     },
     confirmEmailToken: String,
-    confirmEmailTokenExpiry: Number,
     resetPasswordToken: String,
-    resetPasswordTokenExpiry: Number,
   },
   {
     timestamps: true,
@@ -100,6 +98,19 @@ userSchema.methods.getJwtToken = function () {
 // Comparing passwords
 userSchema.methods.isValidPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
+};
+
+// creating email verification token
+userSchema.methods.getEmailVerificationToken = function () {
+  this.confirmEmailToken = jwt.sign(
+    { id: this._id },
+    process.env.JWT_SECRET_KEY_CONFIRM_EMAIL,
+    {
+      expiresIn: "20m",
+    }
+  );
+
+  return this.confirmEmailToken;
 };
 
 // Exporting Model
