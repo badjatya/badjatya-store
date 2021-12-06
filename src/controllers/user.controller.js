@@ -3,6 +3,7 @@ const User = require("../models/user");
 
 // Lib
 const cloudinary = require("cloudinary");
+const jwt = require("jsonwebtoken");
 
 // Utils
 const emailSender = require("../utils/emailSender");
@@ -163,4 +164,29 @@ exports.login = async (req, res) => {
       message: error.message,
     });
   }
+};
+
+exports.confirmEmail = async (req, res) => {
+  const token = req.params.token;
+  const decodedToken = jwt.verify(
+    token,
+    process.env.JWT_SECRET_KEY_CONFIRM_EMAIL
+  );
+
+  const user = await User.findById(decodedToken.id);
+
+  if (!user) {s
+    return res.status(401).json({
+      status: "fail",
+      message: "token invalid or expired, contact admin",
+    });
+  }
+
+  user.isVerifiedUser = true;
+  user.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "Email verified, you can login",
+  });
 };
