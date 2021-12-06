@@ -85,5 +85,13 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Hashing Password
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
+
 // Exporting Model
 module.exports = mongoose.model("User", userSchema);
