@@ -3,6 +3,7 @@ const User = require("../models/user");
 
 // Library
 const cloudinary = require("cloudinary");
+const jwt = require("jsonwebtoken");
 
 // Utils
 const emailSender = require("../utils/emailSender");
@@ -134,6 +135,46 @@ exports.login = async (req, res) => {
       token,
       isVerifiedUser: user.isVerifiedUser,
       user,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+exports.confirmEmail = async (req, res) => {
+  try {
+    // Getting token from param
+    const token = req.params.token;
+
+    // Verifying token
+    const decodedToken = jwt.verify(
+      token,
+      process.env.JWT_SECRET_KEY_CONFIRM_EMAIL
+    );
+
+    // Getting user from the token
+    const user = await User.findById(decodedToken.id);
+
+    // If token is expired or invalid token
+    if (!user) {
+      return customError(res, 401, "Either token expired or invalid");
+    }
+
+    // Checking is the right token that is stored in DB
+    if (token !== user.confirmEmailToken) {
+      return customError(res, 400, "Either token invalid");
+    }
+
+    // All good, making user verified
+    user.confirmEmailToken = undefined;
+    user.isVerifiedUser = true;
+
+    // Saving to DB
+    await user.save();
+
+    res.json({
+      status: "success",
+      message: "User verified, you can login",
     });
   } catch (error) {
     customError(res, 500, error.message, "error");
