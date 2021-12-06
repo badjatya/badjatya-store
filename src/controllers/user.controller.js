@@ -43,7 +43,7 @@ exports.createUser = async (req, res) => {
       const user = await User.create({ name, email, password, photo });
 
       // confirm email token (valid for 20min)
-      const confirmEmailToken = user.getJwtConfirmEmailToken();
+      const confirmEmailToken = await user.getJwtConfirmEmailToken();
 
       // Url for token
       const tokenUrl = `${req.protocol}://${req.get(
@@ -69,7 +69,7 @@ exports.createUser = async (req, res) => {
       const user = await User.create({ name, email, password });
 
       // confirm email token (valid for 20min)
-      const confirmEmailToken = user.getJwtConfirmEmailToken();
+      const confirmEmailToken = await user.getJwtConfirmEmailToken();
 
       // Url for token
       const tokenUrl = `${req.protocol}://${req.get(
@@ -91,6 +91,50 @@ exports.createUser = async (req, res) => {
         message: "Email sent successfully, confirm email",
       });
     }
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  // Checking all the fields are present
+  if (!email || !password) {
+    return customError(res, 400, "Email and password are required");
+  }
+
+  try {
+    const user = await User.findOne({ email });
+
+    // Checking is valid email
+    if (!user) {
+      return customError(res, 401, "Either email or password is incorrect");
+    }
+
+    const isPasswordMatch = await user.isValidPassword(password);
+    if (!isPasswordMatch) {
+      return customError(res, 401, "Either email or password is incorrect");
+    }
+
+    // Valid user, creating jwt token valid for 2days
+    const token = await user.getJwtLoginToken();
+
+    // Sending a cookie valid for 2days
+    res.cookie("token", token, {
+      expires: new Date(
+        Date.now() * process.env.COOKIE_TIME * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+    });
+
+    // Sending response
+    res.json({
+      status: "success",
+      token,
+      isVerifiedUser: user.isVerifiedUser,
+      user,
+    });
   } catch (error) {
     customError(res, 500, error.message, "error");
   }

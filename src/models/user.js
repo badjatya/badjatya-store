@@ -86,16 +86,29 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Hiding private information
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.tokens;
+  delete userObject.password;
+  delete userObject.confirmEmailToken;
+  delete userObject.resetPasswordToken;
+
+  return userObject;
+};
+
 // Hashing Password
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+  if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
   }
   next();
 });
 
 // Getting jwt login token
-userSchema.methods.getJwtLoginToken = function () {
+userSchema.methods.getJwtLoginToken = async function () {
   const token = jwt.sign(
     {
       id: this._id,
@@ -107,6 +120,7 @@ userSchema.methods.getJwtLoginToken = function () {
   );
 
   this.tokens = this.tokens.concat({ token });
+  await this.save();
   return token;
 };
 
@@ -116,7 +130,7 @@ userSchema.methods.isValidPassword = async function (password) {
 };
 
 // Getting jwt confirm email token
-userSchema.methods.getJwtConfirmEmailToken = function () {
+userSchema.methods.getJwtConfirmEmailToken = async function () {
   const token = jwt.sign(
     {
       id: this._id,
@@ -128,11 +142,12 @@ userSchema.methods.getJwtConfirmEmailToken = function () {
   );
 
   this.confirmEmailToken = token;
+  await this.save();
   return token;
 };
 
 // Getting jwt rest password token
-userSchema.methods.getJwtResetPasswordToken = function () {
+userSchema.methods.getJwtResetPasswordToken = async function () {
   const token = jwt.sign(
     {
       id: this._id,
@@ -144,6 +159,7 @@ userSchema.methods.getJwtResetPasswordToken = function () {
   );
 
   this.resetPasswordToken = token;
+  await this.save();
   return token;
 };
 
