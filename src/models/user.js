@@ -74,6 +74,11 @@ const userSchema = new mongoose.Schema(
     },
     confirmEmailToken: String,
     resetPasswordToken: String,
+    tokens: [
+      {
+        token: String,
+      },
+    ],
   },
   {
     timestamps: true,
