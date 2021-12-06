@@ -120,9 +120,9 @@ userSchema.methods.getJwtConfirmEmailToken = function () {
     {
       id: this._id,
     },
-    process.env.JWT_SECRET_KEY,
+    process.env.JWT_SECRET_KEY_CONFIRM_EMAIL,
     {
-      expiresIn: process.env.JWT_EXPIRY,
+      expiresIn: "20m",
     }
   );
 
@@ -136,9 +136,9 @@ userSchema.methods.getJwtResetPasswordToken = function () {
     {
       id: this._id,
     },
-    process.env.JWT_SECRET_KEY,
+    process.env.JWT_SECRET_KEY_RESET_PASSWORD,
     {
-      expiresIn: process.env.JWT_EXPIRY,
+      expiresIn: "20m",
     }
   );
 
