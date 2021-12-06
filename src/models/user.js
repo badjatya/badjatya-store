@@ -80,38 +80,5 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Hashing password
-userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
-  next();
-});
-
-// Generating json web token
-userSchema.methods.getJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRY,
-  });
-};
-
-// Comparing passwords
-userSchema.methods.isValidPassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
-};
-
-// creating email verification token
-userSchema.methods.getEmailVerificationToken = function () {
-  this.confirmEmailToken = jwt.sign(
-    { id: this._id },
-    process.env.JWT_SECRET_KEY_CONFIRM_EMAIL,
-    {
-      expiresIn: "20m",
-    }
-  );
-
-  return this.confirmEmailToken;
-};
-
 // Exporting Model
 module.exports = mongoose.model("User", userSchema);
