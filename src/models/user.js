@@ -109,6 +109,11 @@ userSchema.methods.getJwtLoginToken = function () {
   return token;
 };
 
+// Checking is valid password
+userSchema.methods.isValidPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
 // Getting jwt confirm email token
 userSchema.methods.getJwtConfirmEmailToken = function () {
   const token = jwt.sign(
