@@ -45,6 +45,7 @@ const userSchema = new mongoose.Schema(
     },
     accountCreatedUsing: {
       type: String,
+      default: "local",
       required: [true, "User created account should be known"],
       enum: {
         values: ["local", "google", "facebook", "github"],

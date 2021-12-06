@@ -15,6 +15,7 @@ const emailSender = async (option) => {
     to: option.email, // list of receivers
     subject: option.subject, // Subject line
     text: option.message, // plain text body
+    html: option.html,
   };
 
   // send mail with defined transport object
