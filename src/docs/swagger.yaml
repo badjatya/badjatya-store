@@ -127,12 +127,15 @@ components:
               example: githubTestId
         confirmEmailToken:
           type: string
-        confirmEmailTokenExpiry:
-          type: number
         resetPasswordToken:
           type: string
-        resetPasswordTokenExpiry:
-          type: number
+        tokens:
+          type: array
+          items:
+            type: object
+            properties:
+              token:
+                type: string
         createdAt:
           type: string
           format: date
@@ -145,7 +148,7 @@ paths:
     post:
       tags:
         - User
-      summary: Creates a new user, photo is optional but name, email and password are required
+      summary: Creates a new user, photo is optional but name, email and password are required and it sends a confirmation mail to user
       requestBody:
         content:
           multipart/form-data:
@@ -183,8 +186,8 @@ paths:
                   format: binary
                   description: The photo is optional but user can upload an image
       responses:
-        201:
-          description: A user has been created
+        200:
+          description: A user has been created and a verification email is also sent to verify user's email address
           content:
             application/json:
               schema:
@@ -193,12 +196,9 @@ paths:
                   status:
                     type: string
                     example: success
-                  token:
+                  message:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWNjYmYzNTlhY2RmYzk3YzVhOTNiNSIsImlhdCI6MTYzODcxNDM1NSwiZXhwIjoxNjM4ODg3MTU1fQ.LITLBN6c4WKseKPXOUNdsJmZsbffFonTdYWDmxmDsro
-                  user:
-                    type: object
-                    $ref: "#/components/schemas/User"
+                    example: Email sent successfully, confirm email
         400:
           description: bad request, name, email and password are required
           content:
