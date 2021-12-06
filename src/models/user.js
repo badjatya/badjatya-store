@@ -93,5 +93,21 @@ userSchema.pre("save", function (next) {
   next();
 });
 
+// Getting jwt login token
+userSchema.methods.getJwtLoginToken = function () {
+  const token = jwt.sign(
+    {
+      id: this._id,
+    },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: process.env.JWT_EXPIRY,
+    }
+  );
+
+  this.tokens = this.tokens.concat({ token });
+  return token;
+};
+
 // Exporting Model
 module.exports = mongoose.model("User", userSchema);
