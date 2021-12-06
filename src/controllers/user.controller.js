@@ -35,12 +35,15 @@ exports.createUser = async (req, res) => {
       email,
       subject: `Confirm email mail to ${name}`,
       text: "Click on the button to confirm email",
-      html: `<a href=${tokenUrl}>Confirm email</a>`,
+      html: `
+      <p style="margin-bottom: 20px">Click below button to confirm email </p>
+      <a style="display:block; text-align:center; padding:20px; background-color: black; color: white; border-radius: 30px; text-decoration:none " href=${tokenUrl}>Confirm email</a>
+      `,
     });
 
     res.json({
       status: "success",
-      message: "email sent",
+      message: "Email sent successfully, confirm email",
     });
   } catch (error) {
     customError(res, 500, error.message, "error");
