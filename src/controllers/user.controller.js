@@ -245,3 +245,32 @@ exports.getUserProfile = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// updating user profile not password and image
+exports.updateUserProfile = async (req, res) => {
+  try {
+    // Destructuring
+    const { name, email } = req.body;
+
+    // updating user profile
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        name: name ? name : req.user.name,
+        email: email ? email : req.user.email,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    res.json({
+      status: "success",
+      message: "User profile updated",
+      user,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};

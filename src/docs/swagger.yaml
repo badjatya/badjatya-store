@@ -711,3 +711,134 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  /users/profile/update:
+    patch:
+      tags:
+        - User
+      summary: A logged in user can update his profile i.e name and email
+      responses:
+        200:
+          description: success, user profile updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User profile updated
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: 61a24ff7ca438a5a347730f0
+                      name:
+                        type: string
+                        example: Abc Xyz
+                      email:
+                        type: string
+                        example: email@dev.com
+                      role:
+                        type: string
+                        enum:
+                          - user
+                          - admin
+                          - manager
+                        example: user
+                      isVerifiedUser:
+                        type: boolean
+                        example: false
+                      photo:
+                        type: object
+                        properties:
+                          secureUrl:
+                            type: string
+                            example: ywz.png
+                          publicId:
+                            type: string
+                            example: photoId
+                      accountCreatedUsing:
+                        type: string
+                        enum:
+                          - local
+                          - google
+                          - facebook
+                          - github
+                        example: local
+                      google:
+                        type: object
+                        properties:
+                          isGoogle:
+                            type: boolean
+                            example: false
+                          googleId:
+                            type: string
+                            example: googleTestId
+                      facebook:
+                        type: object
+                        properties:
+                          isFacebook:
+                            type: boolean
+                            example: false
+                          facebookId:
+                            type: string
+                            example: facebookTestId
+                      github:
+                        type: object
+                        properties:
+                          isGithub:
+                            type: boolean
+                            example: false
+                          githubId:
+                            type: string
+                            example: githubTestId
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+        400:
+          description: bad request, Token not found, please authenticate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Token not found, please authenticate
+        401:
+          description: bad request, Either token expired or invalid, please authenticate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Either token expired or invalid, please authenticate
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
