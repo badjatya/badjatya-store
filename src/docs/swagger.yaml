@@ -543,7 +543,7 @@ paths:
                     example: success
                   message:
                     type: string
-                    example: User logged out all successful
+                    example: User logged out of all instances successfully
         400:
           description: bad request, Token not found, please authenticate
           content:

@@ -227,7 +227,7 @@ exports.logoutAll = async (req, res) => {
 
     res.json({
       status: "success",
-      message: "User logged out all successful",
+      message: "User logged out of all instances successfully",
     });
   } catch (error) {
     customError(res, 500, error.message, "error");
