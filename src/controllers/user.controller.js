@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const emailSender = require("../utils/emailSender");
 const customError = require("../utils/customError");
 
+// Creating a new user - signup
 exports.createUser = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -97,6 +98,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
+// Logging a user - sign in
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -141,6 +143,7 @@ exports.login = async (req, res) => {
   }
 };
 
+// User confirms email address
 exports.confirmEmail = async (req, res) => {
   try {
     // Getting token from param
@@ -181,23 +184,52 @@ exports.confirmEmail = async (req, res) => {
   }
 };
 
+// Logged in user can logout
 exports.logout = async (req, res) => {
-  // Removing token from tokens array
-  req.user.tokens = req.user.tokens.filter(
-    (token) => token.token !== req.token
-  );
+  try {
+    // Removing token from tokens array
+    req.user.tokens = req.user.tokens.filter(
+      (token) => token.token !== req.token
+    );
 
-  // Saving to Database
-  await req.user.save();
+    // Saving to Database
+    await req.user.save();
 
-  // Clearing cookies
-  res.cookie("token", null, {
-    expires: new Date(Date.now()),
-    httpOnly: true,
-  });
+    // Clearing cookies
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
 
-  res.json({
-    status: "success",
-    message: "User logged out successfully",
-  });
+    res.json({
+      status: "success",
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Logged in user can logout all instances
+exports.logoutAll = async (req, res) => {
+  try {
+    // Removing tokens
+    req.user.tokens = [];
+
+    // Saving to Database
+    await req.user.save();
+
+    // Clearing cookies
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
+
+    res.json({
+      status: "success",
+      message: "User logged out all successful",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
 };
