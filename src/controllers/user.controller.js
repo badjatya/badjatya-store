@@ -233,3 +233,15 @@ exports.logoutAll = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Getting user profile
+exports.getUserProfile = async (req, res) => {
+  try {
+    res.json({
+      status: "success",
+      user: req.user,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};

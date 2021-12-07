@@ -7,15 +7,18 @@ const {
   confirmEmail,
   logout,
   logoutAll,
+  getUserProfile,
 } = require("../controllers/user.controller");
 
 // User middleware
 const { isLoggedIn } = require("../middlewares/user");
 
+// User route
 router.route("/signup").post(createUser);
 router.route("/login").post(login);
 router.route("/email/confirm/:token").get(confirmEmail);
 router.route("/logout").get(isLoggedIn, logout);
 router.route("/logout/all").get(isLoggedIn, logoutAll);
+router.route("/profile").get(isLoggedIn, getUserProfile);
 
 module.exports = router;
