@@ -306,3 +306,43 @@ exports.updateUserPassword = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// updating user's profile photo
+exports.updateUserProfilePhoto = async (req, res) => {
+  try {
+    // Checking file is present
+    if (!req.files) {
+      return customError(res, 400, "For updating profile, photo is required");
+    }
+
+    // deleting previous photo if photo is there
+    if (req.user.photo.publicId) {
+      await cloudinary.v2.uploader.destroy(req.user.photo.publicId);
+    }
+
+    // Uploading new photo
+    const result = await cloudinary.v2.uploader.upload(
+      req.files.photo.tempFilePath,
+      {
+        folder: "badjatya-store/users",
+        width: 150,
+        crop: "scale",
+      }
+    );
+    const photo = {
+      secureUrl: result.secure_url,
+      publicId: result.public_id,
+    };
+
+    // updating DB with new photo
+    req.user.photo = photo;
+    await req.user.save();
+
+    res.json({
+      status: "success",
+      message: "Updated user's profile photo",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
