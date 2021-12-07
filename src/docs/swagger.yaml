@@ -71,6 +71,9 @@ components:
         email:
           type: string
           example: email@dev.com
+        password:
+          type: string
+          example: 1234567
         role:
           type: string
           enum:
@@ -281,12 +284,84 @@ paths:
                     example: success
                   token:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWNjYmYzNTlhY2RmYzk3YzVhOTNiNSIsImlhdCI6MTYzODcxNDM1NSwiZXhwIjoxNjM4ODg3MTU1fQ.LITLBN6c4WKseKPXOUNdsJmZsbffFonTdYWDmxmDsro
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWNjYmYzNTlhY2RmYzk3YzVhOTNiNSIsImlhdCI6MTYzODcxNDM1NSwiZXhwIjoxNjM4ODg3MTU1fQ
+                  isVerifiedUser:
+                    type: boolean
+                    example: false
                   user:
                     type: object
-                    $ref: "#/components/schemas/User"
+                    properties:
+                      _id:
+                        type: string
+                        example: 61a24ff7ca438a5a347730f0
+                      name:
+                        type: string
+                        example: Abc Xyz
+                      email:
+                        type: string
+                        example: email@dev.com
+                      role:
+                        type: string
+                        enum:
+                          - user
+                          - admin
+                          - manager
+                        example: user
+                      isVerifiedUser:
+                        type: boolean
+                        example: false
+                      photo:
+                        type: object
+                        properties:
+                          secureUrl:
+                            type: string
+                            example: ywz.png
+                          publicId:
+                            type: string
+                            example: photoId
+                      accountCreatedUsing:
+                        type: string
+                        enum:
+                          - local
+                          - google
+                          - facebook
+                          - github
+                        example: local
+                      google:
+                        type: object
+                        properties:
+                          isGoogle:
+                            type: boolean
+                            example: false
+                          googleId:
+                            type: string
+                            example: googleTestId
+                      facebook:
+                        type: object
+                        properties:
+                          isFacebook:
+                            type: boolean
+                            example: false
+                          facebookId:
+                            type: string
+                            example: facebookTestId
+                      github:
+                        type: object
+                        properties:
+                          isGithub:
+                            type: boolean
+                            example: false
+                          githubId:
+                            type: string
+                            example: githubTestId
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
         400:
-          description: bad request, name, email and password are required
+          description: bad request, email and password are required
           content:
             application/json:
               schema:
@@ -297,9 +372,9 @@ paths:
                     example: fail
                   message:
                     type: string
-                    example: name, email and password are required
+                    example: email and password are required
         401:
-          description: bad request, User already exists, please login
+          description: bad request, Either email or password is incorrect
           content:
             application/json:
               schema:
@@ -310,7 +385,7 @@ paths:
                     example: fail
                   message:
                     type: string
-                    example: User already exists, please login
+                    example: Either email or password is incorrect
         500:
           description: Internal server error
           content:
@@ -324,3 +399,69 @@ paths:
                   message:
                     type: string
                     example: error messages
+
+  /users/email/confirm/{token}:
+    get:
+      tags:
+        - User
+      summary: Enter the token send to user at there email for trial mail will be sent at SMTP mail trap server
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWRiYThiYmJkODgzMDNmNWRlMjVjNyIsImlhdCI6MTYzODc3NTQzNSwiZXhwIjoxNjM4Nzc2NjM1fQ
+      responses:
+        200:
+          description: Success, User verified, you can login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User verified, you can login
+        400:
+          description: Bad request, Either token invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Either token invalid or expired
+        401:
+          description: Bad request, Either token expired or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Either token expired or invalid
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
