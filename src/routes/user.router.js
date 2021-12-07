@@ -11,6 +11,7 @@ const {
   updateUserProfile,
   updateUserPassword,
   updateUserProfilePhoto,
+  deleteUserProfilePhoto,
 } = require("../controllers/user.controller");
 
 // User middleware
@@ -26,5 +27,8 @@ router.route("/profile").get(isLoggedIn, getUserProfile);
 router.route("/profile/update").patch(isLoggedIn, updateUserProfile);
 router.route("/profile/password/update").patch(isLoggedIn, updateUserPassword);
 router.route("/profile/photo/update").patch(isLoggedIn, updateUserProfilePhoto);
+router
+  .route("/profile/photo/delete")
+  .delete(isLoggedIn, deleteUserProfilePhoto);
 
 module.exports = router;

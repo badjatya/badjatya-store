@@ -346,3 +346,25 @@ exports.updateUserProfilePhoto = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// updating user's profile photo
+exports.deleteUserProfilePhoto = async (req, res) => {
+  try {
+    // deleting previous photo if photo is there
+    if (!req.user.photo.publicId) {
+      return customError(res, 400, "No profile photo found for deleting");
+    }
+    await cloudinary.v2.uploader.destroy(req.user.photo.publicId);
+
+    // updating DB with no photo
+    req.user.photo = {};
+    await req.user.save();
+
+    res.json({
+      status: "success",
+      message: "Deleted user's profile photo",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
