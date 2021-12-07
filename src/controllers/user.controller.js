@@ -180,3 +180,24 @@ exports.confirmEmail = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+exports.logout = async (req, res) => {
+  // Removing token from tokens array
+  req.user.tokens = req.user.tokens.filter(
+    (token) => token.token !== req.token
+  );
+
+  // Saving to Database
+  await req.user.save();
+
+  // Clearing cookies
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
+
+  res.json({
+    status: "success",
+    message: "User logged out successfully",
+  });
+};
