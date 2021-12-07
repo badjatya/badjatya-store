@@ -14,6 +14,7 @@ const {
   deleteUserProfilePhoto,
   confirmEmailResendToken,
   forgotPassword,
+  confirmResetPassword,
 } = require("../controllers/user.controller");
 
 // User middleware
@@ -34,5 +35,6 @@ router
   .route("/profile/photo/delete")
   .delete(isLoggedIn, deleteUserProfilePhoto);
 router.route("/forgot/password").post(forgotPassword);
+router.route("/password/reset/:token").post(confirmResetPassword);
 
 module.exports = router;

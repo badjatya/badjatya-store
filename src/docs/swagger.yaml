@@ -1188,3 +1188,92 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  /users/password/reset/{token}:
+    post:
+      tags:
+        - User
+      summary: User can create a new password for login, but have to copy the token from mail
+      parameters:
+        - name: token
+          in: path
+          type: string
+          required: true
+          default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWY3MmZkNmI2ZjgwNDE3ODI5M2MyNiIsImlhdCI6MTYzODg5Njg2MywiZXhwIjoxNjM4ODk4MDYzfQ.E0FyKLMDN9B3W8K8hwN3ohojrPhHujQUc35CFtUvh8o
+          description: Enter the token received in mail
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - password
+                - confirmPassword
+              properties:
+                password:
+                  type: string
+                  format: password
+                  example: 12345678
+                  description: Enter the new password
+                  required: true
+                  minLength: 7
+                confirmPassword:
+                  type: string
+                  format: password
+                  example: 12345678
+                  description: Enter the confirm password
+                  required: true
+                  minLength: 7
+      responses:
+        200:
+          description: success, The user's password is update, you can login with new credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: The user's password is update, you can login with new credentials
+        400:
+          description: Bad request, Either Password or confirmPassword are not matching or not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Either Password or confirmPassword are not matching or not found
+        401:
+          description: Token is either invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Token is either invalid or expired
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message

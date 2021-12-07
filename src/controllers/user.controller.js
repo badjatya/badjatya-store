@@ -430,12 +430,64 @@ exports.forgotPassword = async (req, res) => {
       html: `
       <p style="margin-bottom: 20px">Hey ${email}, Click below button to create new password for login at Badjatya Store </p>
       <a style="display:block; text-align:center; padding:20px; background-color: black; color: white; border-radius: 30px; text-decoration:none " href=${resetPasswordUrl}>Confirm forgot password</a>
+      <p>${resetPasswordUrl}</p>
       `,
     });
 
     res.json({
       status: "success",
       message: "Forgot password email sent successfully, valid for only 20 min",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+exports.confirmResetPassword = async (req, res) => {
+  try {
+    // Destructuring
+    const { password, confirmPassword } = req.body;
+
+    // Checking password and confirmPassword are present
+    if (!password || !confirmPassword) {
+      return customError(res, 400, "password and confirmPassword are required");
+    }
+
+    // Matching password and confirmPassword
+    if (password !== confirmPassword) {
+      return customError(
+        res,
+        400,
+        "password and confirmPassword are not matching"
+      );
+    }
+
+    const token = req.params.token;
+    const decodedToken = jwt.verify(
+      token,
+      process.env.JWT_SECRET_KEY_RESET_PASSWORD
+    );
+
+    // Checking the token is valid
+    const user = await User.findById(decodedToken.id);
+    if (!user) {
+      return customError(res, 401, "Token is either invalid or expired");
+    }
+
+    // Cross checking the token
+    if (token !== user.resetPasswordToken) {
+      return customError(res, 401, "Token is either invalid or expired");
+    }
+
+    // Saving password to DB
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    await user.save();
+
+    res.json({
+      status: "success",
+      message:
+        "The user's password is update, you can login with new credentials",
     });
   } catch (error) {
     customError(res, 500, error.message, "error");
