@@ -398,3 +398,46 @@ exports.confirmEmailResendToken = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Forgot password
+exports.forgotPassword = async (req, res) => {
+  try {
+    // checking email is present
+    const { email } = req.body;
+
+    // If email is not present
+    if (!email) {
+      return customError(res, 404, "Email is required for forgot password");
+    }
+
+    const user = await User.findOne({ email });
+
+    // Checking is valid email
+    if (!user) {
+      return customError(res, 401, "Either email is incorrect or invalid");
+    }
+
+    const resetPasswordToken = await user.getJwtResetPasswordToken();
+
+    const resetPasswordUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/v1/users/password/reset/${resetPasswordToken}`;
+
+    emailSender({
+      email,
+      subject: "Badjatya Store | Forgot password email",
+      text: `Forgot password mail, copy the link and open in browser valid for only 20 min /n/n ${resetPasswordUrl}`,
+      html: `
+      <p style="margin-bottom: 20px">Hey ${email}, Click below button to create new password for login at Badjatya Store </p>
+      <a style="display:block; text-align:center; padding:20px; background-color: black; color: white; border-radius: 30px; text-decoration:none " href=${resetPasswordUrl}>Confirm forgot password</a>
+      `,
+    });
+
+    res.json({
+      status: "success",
+      message: "Forgot password email sent successfully, valid for only 20 min",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};

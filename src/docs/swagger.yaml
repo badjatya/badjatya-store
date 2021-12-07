@@ -1114,3 +1114,77 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  /users/forgot/password:
+    post:
+      tags:
+        - User
+      summary: If a user forgot's his password he will receive a confirm email
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  example: test@dev.com
+                  format: email
+                  required: true
+                  maxLength: An email must be less than 50 characters
+                  description: Enter the email of your account to proceed further and receive confirm email
+      responses:
+        200:
+          description: success, user received an email to confirm and valid for 20 min
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Forgot password email sent successfully, valid for only 20 min
+        401:
+          description: Either email is incorrect or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Either email is incorrect or invalid
+        404:
+          description: Email is required for forgot password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Email is required for forgot password
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message

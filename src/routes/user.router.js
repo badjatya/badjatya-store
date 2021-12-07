@@ -13,6 +13,7 @@ const {
   updateUserProfilePhoto,
   deleteUserProfilePhoto,
   confirmEmailResendToken,
+  forgotPassword,
 } = require("../controllers/user.controller");
 
 // User middleware
@@ -32,5 +33,6 @@ router.route("/profile/photo/update").patch(isLoggedIn, updateUserProfilePhoto);
 router
   .route("/profile/photo/delete")
   .delete(isLoggedIn, deleteUserProfilePhoto);
+router.route("/forgot/password").post(forgotPassword);
 
 module.exports = router;
