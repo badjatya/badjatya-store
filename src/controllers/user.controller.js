@@ -274,3 +274,35 @@ exports.updateUserProfile = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// updating user password
+exports.updateUserPassword = async (req, res) => {
+  try {
+    // Destructuring
+    const { oldPassword, newPassword } = req.body;
+
+    // Checking all the fields are present
+    if (!oldPassword || !newPassword) {
+      return customError(res, 400, "oldPassword and newPassword are required");
+    }
+
+    // Checking is old Password is correct
+    const isCorrectPassword = await req.user.isValidPassword(oldPassword);
+
+    // If oldPassword is incorrect
+    if (!isCorrectPassword) {
+      return customError(res, 401, "Password is incorrect or invalid");
+    }
+
+    // updating new password
+    req.user.password = newPassword;
+    await req.user.save();
+
+    res.json({
+      status: "success",
+      message: "Updated user's password",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};

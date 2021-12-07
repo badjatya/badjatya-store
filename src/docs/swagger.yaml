@@ -842,3 +842,85 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  /users/profile/password/update:
+    patch:
+      tags:
+        - User
+      summary: A logged in user can update his password, required oldPassword and newPassword
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - oldPassword
+                - newPassword
+              properties:
+                oldPassword:
+                  type: string
+                  required: true
+                  format: password
+                  example: 1234567
+                  minLength: 7
+                  description: Enter the old password, and password should be at least 7 characters long
+                newPassword:
+                  type: string
+                  required: true
+                  format: password
+                  example: 12345678
+                  minLength: 7
+                  description: Enter the new password, and password should be at least 7 characters long
+      responses:
+        200:
+          description: success, user's password updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Updated user's password
+        400:
+          description: bad request, oldPassword and newPassword are required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: oldPassword and newPassword are required
+        401:
+          description: bad request, Password is incorrect or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Password is incorrect or invalid
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message

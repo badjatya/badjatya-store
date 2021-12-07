@@ -9,6 +9,7 @@ const {
   logoutAll,
   getUserProfile,
   updateUserProfile,
+  updateUserPassword,
 } = require("../controllers/user.controller");
 
 // User middleware
@@ -22,5 +23,6 @@ router.route("/logout").get(isLoggedIn, logout);
 router.route("/logout/all").get(isLoggedIn, logoutAll);
 router.route("/profile").get(isLoggedIn, getUserProfile);
 router.route("/profile/update").patch(isLoggedIn, updateUserProfile);
+router.route("/profile/password/update").patch(isLoggedIn, updateUserPassword);
 
 module.exports = router;
