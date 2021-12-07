@@ -368,3 +368,33 @@ exports.deleteUserProfilePhoto = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Creating a new user - signup
+exports.confirmEmailResendToken = async (req, res) => {
+  try {
+    // confirm email token (valid for 20min)
+    const confirmEmailToken = await req.user.getJwtConfirmEmailToken();
+
+    // Url for token
+    const tokenUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/v1/users/email/confirm/${confirmEmailToken}`;
+
+    emailSender({
+      email: req.user.email,
+      subject: `Confirm email mail to ${req.user.name}`,
+      text: "Click on the button to confirm email",
+      html: `
+          <p style="margin-bottom: 20px">Hey ${req.user.name}, Click below button to confirm email </p>
+          <a style="display:block; text-align:center; padding:20px; background-color: black; color: white; border-radius: 30px; text-decoration:none " href=${tokenUrl}>Confirm email</a>
+          `,
+    });
+
+    res.json({
+      status: "success",
+      message: "Confirm email resent successfully ",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
