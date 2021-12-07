@@ -465,3 +465,62 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  /users/logout:
+    get:
+      tags:
+        - User
+      summary: A logged in user can logout, the cookies are removed but for mobile front end dev has to remove the token.
+      responses:
+        200:
+          description: success, user logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User logged out successfully
+        400:
+          description: bad request, Token not found, please authenticate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Token not found, please authenticate
+        401:
+          description: bad request, Either token expired or invalid, please authenticate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Either token expired or invalid, please authenticate
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message

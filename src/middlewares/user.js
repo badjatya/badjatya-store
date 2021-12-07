@@ -16,7 +16,7 @@ exports.isLoggedIn = async (req, res, next) => {
       if (req.header("Authorization")) {
         token = req.header("Authorization").replace("Bearer ", "");
       } else {
-        return customError(res, 400, "Token not found");
+        return customError(res, 400, "Token not found, please authenticate");
       }
     }
 
@@ -26,7 +26,21 @@ exports.isLoggedIn = async (req, res, next) => {
     // Finding user based on token
     const user = await User.findById(decodedToken.id);
 
+    // If no user found with the entered token
     if (!user) {
+      return customError(
+        res,
+        401,
+        "Either token expired or invalid, please authenticate"
+      );
+    }
+
+    // Checking the token is present in tokens array of the user
+    const isTokenPresentInTokensArray = user.tokens.find(
+      (t) => t.token === token
+    );
+
+    if (!isTokenPresentInTokensArray) {
       return customError(
         res,
         401,
@@ -38,6 +52,7 @@ exports.isLoggedIn = async (req, res, next) => {
     req.token = token;
     next();
   } catch (error) {
+    console.log(error);
     customError(res, 500, error.message, "error");
   }
 };
