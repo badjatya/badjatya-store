@@ -15,14 +15,27 @@ const {
   confirmEmailResendToken,
   forgotPassword,
   confirmResetPassword,
+  socialLogin,
 } = require("../controllers/user.controller");
 
 // User middleware
 const { isLoggedIn } = require("../middlewares/user");
 
+// Lib
+const passport = require("passport");
+
 // User route
 router.route("/signup").post(createUser);
 router.route("/login").post(login);
+router.route("/google").get(
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+router
+  .route("/google/callback")
+  .get(passport.authenticate("google"), socialLogin);
+
 router.route("/email/confirm/resend").get(isLoggedIn, confirmEmailResendToken);
 router.route("/email/confirm/:token").get(confirmEmail);
 router.route("/logout").get(isLoggedIn, logout);

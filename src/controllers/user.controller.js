@@ -4,6 +4,7 @@ const User = require("../models/user");
 // Library
 const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 // Utils
 const emailSender = require("../utils/emailSender");
@@ -492,4 +493,25 @@ exports.confirmResetPassword = async (req, res) => {
   } catch (error) {
     customError(res, 500, error.message, "error");
   }
+};
+
+exports.socialLogin = async (req, res) => {
+  // Getting token
+  const token = await req.user.getJwtLoginToken();
+
+  // Sending a cookie valid for 2days
+  res.cookie("token", token, {
+    expires: new Date(
+      Date.now() * process.env.COOKIE_TIME * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  });
+
+  // Sending response
+  res.json({
+    status: "success",
+    token,
+    isVerifiedUser: req.user.isVerifiedUser,
+    user: req.user,
+  });
 };

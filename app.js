@@ -27,6 +27,7 @@ app.use(
 if (process.env.ENVIRONMENT === "development") {
   app.use(morgan("dev"));
 }
+const GoogleStrategy = require("./src/passport/google");
 app.use(passport.initialize());
 
 // Template engine
