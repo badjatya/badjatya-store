@@ -31,6 +31,7 @@ app.use(passport.initialize());
 
 // Template engine
 app.set("view engine", "ejs");
+app.set("views", "./src/views");
 
 // Routes
 app.use("/", require("./src/routes/home.router"));
