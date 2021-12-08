@@ -17,25 +17,35 @@
   <body class="bg-dark text-white">
     <div class="d-flex justify-content-center align-items-center pt-5 mt-5">
       <div class="px-4 py-5 my-5 text-center pt-5 mt-5">
-        <h1 class="display-5 fw-bold pt-4">Badjatya T-Shirt Store</h1>
+        <h2 class="fw-bold pt-5 mt-3">Badjatya T-Shirt Store</h2>
         <div class="col-lg-8 mx-auto">
           <p class="lead mb-4">
-            Welcome to Badjatya T-Shirt store. Its an e-commerce backend REST
-            API project build using JavaScript as a backend language and with
-            the help of backend framework NodeJS and ExpressJS and the database
-            used in this project is MongoDB. The other specification of the
-            application is that I have integrated two payment gateways razorpay
-            and stripe. For storing images I am using cloudinary. The project is
-            hosted on heroku and database on atlas.
+            Testing Social logins for this project I have implemented three
+            social logins google, facebook and github
           </p>
           <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <a href="/api-docs" class="btn btn-primary btn-lg px-4 gap-3">
-              REST API Documentation
+            <a
+              href="/api/v1/users/google"
+              class="btn btn-success btn-lg px-4 gap-3"
+            >
+              Google
             </a>
-            <a href="/social" class="btn btn-secondary btn-lg px-4 gap-3">
-              Test Social Logins
+            <a
+              href="/api/v1/users/facebook"
+              class="btn btn-warning btn-lg px-4 gap-3"
+            >
+              Facebook
+            </a>
+            <a
+              href="/api/v1/users/github"
+              class="btn btn-light btn-lg px-4 gap-3"
+            >
+              Github
             </a>
           </div>
+          <p style="text-align: center; margin-top: 10px">
+            <a href="/api-docs">Rest API Docs</a>
+          </p>
         </div>
       </div>
     </div>
