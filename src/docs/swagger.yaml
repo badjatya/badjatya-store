@@ -101,33 +101,9 @@ components:
             - facebook
             - github
           example: local
-        google:
-          type: object
-          properties:
-            isGoogle:
-              type: boolean
-              example: false
-            googleId:
-              type: string
-              example: googleTestId
-        facebook:
-          type: object
-          properties:
-            isFacebook:
-              type: boolean
-              example: false
-            facebookId:
-              type: string
-              example: facebookTestId
-        github:
-          type: object
-          properties:
-            isGithub:
-              type: boolean
-              example: false
-            githubId:
-              type: string
-              example: githubTestId
+        socialLoginId:
+          type: string
+          example: Id provided by social login
         confirmEmailToken:
           type: string
         resetPasswordToken:
@@ -327,33 +303,8 @@ paths:
                           - facebook
                           - github
                         example: local
-                      google:
-                        type: object
-                        properties:
-                          isGoogle:
-                            type: boolean
-                            example: false
-                          googleId:
-                            type: string
-                            example: googleTestId
-                      facebook:
-                        type: object
-                        properties:
-                          isFacebook:
-                            type: boolean
-                            example: false
-                          facebookId:
-                            type: string
-                            example: facebookTestId
-                      github:
-                        type: object
-                        properties:
-                          isGithub:
-                            type: boolean
-                            example: false
-                          githubId:
-                            type: string
-                            example: githubTestId
+                      socialLoginId:
+                        type: string
                       createdAt:
                         type: string
                         format: date
@@ -386,6 +337,172 @@ paths:
                   message:
                     type: string
                     example: Either email or password is incorrect
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error messages
+
+  /users/google:
+    get:
+      tags:
+        - User
+      summary: A user can login using google, this route cant be executed in API DOCS
+      responses:
+        200:
+          description: success, user successfully logged using google auth and cookie added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWNjYmYzNTlhY2RmYzk3YzVhOTNiNSIsImlhdCI6MTYzODcxNDM1NSwiZXhwIjoxNjM4ODg3MTU1fQ
+                  isVerifiedUser:
+                    type: boolean
+                    example: true
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: 61a24ff7ca438a5a347730f0
+                      name:
+                        type: string
+                        example: Abc Xyz
+                      email:
+                        type: string
+                        example: email@dev.com
+                      role:
+                        type: string
+                        enum:
+                          - user
+                          - admin
+                          - manager
+                        example: user
+                      isVerifiedUser:
+                        type: boolean
+                        example: true
+                      photo:
+                        type: object
+                        properties:
+                          secureUrl:
+                            type: string
+                            example: ywz.png
+                          publicId:
+                            type: string
+                            example: photoId
+                      accountCreatedUsing:
+                        type: string
+                        enum:
+                          - local
+                          - google
+                          - facebook
+                          - github
+                        example: google
+                      socialLoginId:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error messages
+
+  /users/facebook:
+    get:
+      tags:
+        - User
+      summary: A user can login using facebook, this route cant be executed in API DOCS
+      responses:
+        200:
+          description: success, user successfully logged using facebook auth and cookie added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYWNjYmYzNTlhY2RmYzk3YzVhOTNiNSIsImlhdCI6MTYzODcxNDM1NSwiZXhwIjoxNjM4ODg3MTU1fQ
+                  isVerifiedUser:
+                    type: boolean
+                    example: true
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: 61a24ff7ca438a5a347730f0
+                      name:
+                        type: string
+                        example: Abc Xyz
+                      email:
+                        type: string
+                        example: email@dev.com
+                      role:
+                        type: string
+                        enum:
+                          - user
+                          - admin
+                          - manager
+                        example: user
+                      isVerifiedUser:
+                        type: boolean
+                        example: true
+                      photo:
+                        type: object
+                        properties:
+                          secureUrl:
+                            type: string
+                            example: ywz.png
+                          publicId:
+                            type: string
+                            example: photoId
+                      accountCreatedUsing:
+                        type: string
+                        enum:
+                          - local
+                          - google
+                          - facebook
+                          - github
+                        example: facebook
+                      socialLoginId:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
         500:
           description: Internal server error
           content:
@@ -698,33 +815,8 @@ paths:
                           - facebook
                           - github
                         example: local
-                      google:
-                        type: object
-                        properties:
-                          isGoogle:
-                            type: boolean
-                            example: false
-                          googleId:
-                            type: string
-                            example: googleTestId
-                      facebook:
-                        type: object
-                        properties:
-                          isFacebook:
-                            type: boolean
-                            example: false
-                          facebookId:
-                            type: string
-                            example: facebookTestId
-                      github:
-                        type: object
-                        properties:
-                          isGithub:
-                            type: boolean
-                            example: false
-                          githubId:
-                            type: string
-                            example: githubTestId
+                      socialLoginId:
+                        type: string
                       createdAt:
                         type: string
                         format: date
