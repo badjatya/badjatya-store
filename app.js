@@ -28,6 +28,7 @@ if (process.env.ENVIRONMENT === "development") {
   app.use(morgan("dev"));
 }
 const GoogleStrategy = require("./src/passport/google");
+const FacebookStrategy = require("./src/passport/facebook");
 app.use(passport.initialize());
 
 // Template engine

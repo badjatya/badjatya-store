@@ -24,9 +24,13 @@ const { isLoggedIn } = require("../middlewares/user");
 // Lib
 const passport = require("passport");
 
-// User route
+// * User route
+
+// Local
 router.route("/signup").post(createUser);
 router.route("/login").post(login);
+
+// Google
 router.route("/google").get(
   passport.authenticate("google", {
     scope: ["profile", "email"],
@@ -35,6 +39,16 @@ router.route("/google").get(
 router
   .route("/google/callback")
   .get(passport.authenticate("google"), socialLogin);
+
+// Facebook
+router.route("/facebook").get(
+  passport.authenticate("facebook", {
+    scope: ["email"],
+  })
+);
+router
+  .route("/facebook/callback")
+  .get(passport.authenticate("facebook"), socialLogin);
 
 router.route("/email/confirm/resend").get(isLoggedIn, confirmEmailResendToken);
 router.route("/email/confirm/:token").get(confirmEmail);
