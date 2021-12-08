@@ -52,27 +52,7 @@ const userSchema = new mongoose.Schema(
         message: "Please select from this category",
       },
     },
-    google: {
-      isGoogle: {
-        type: Boolean,
-        default: false,
-      },
-      googleId: String,
-    },
-    facebook: {
-      isFacebook: {
-        type: Boolean,
-        default: false,
-      },
-      facebookId: String,
-    },
-    github: {
-      isGithub: {
-        type: Boolean,
-        default: false,
-      },
-      githubId: String,
-    },
+    socialLoginId: String,
     confirmEmailToken: String,
     resetPasswordToken: String,
     tokens: [

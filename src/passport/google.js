@@ -13,7 +13,7 @@ passport.use(
       callbackURL: "http://localhost:5000/api/v1/users/google/callback",
     },
     function (accessToken, refreshToken, profile, next) {
-      User.findOne({ email: profile._json.email }).then((user) => {
+      User.findOne({ socialLoginId: profile.id }).then((user) => {
         if (user) {
           next(null, user);
         } else {
@@ -22,10 +22,7 @@ passport.use(
             email: profile._json.email,
             isVerifiedUser: true,
             accountCreatedUsing: "google",
-            google: {
-              isGoogle: true,
-              googleId: profile.id,
-            },
+            socialLoginId: profile.id,
           })
             .then((user) => {
               next(null, user);
