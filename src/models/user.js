@@ -53,6 +53,16 @@ const userSchema = new mongoose.Schema(
       },
     },
     socialLoginId: String,
+    referId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    balance: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     confirmEmailToken: String,
     resetPasswordToken: String,
     tokens: [

@@ -5,6 +5,7 @@ const User = require("../models/user");
 const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const { nanoid } = require("nanoid");
 
 // Utils
 const emailSender = require("../utils/emailSender");
@@ -42,8 +43,33 @@ exports.createUser = async (req, res) => {
         publicId: result.public_id,
       };
 
+      // ReferId
+      const referId = nanoid();
+      let balance = 0;
+
+      // Checking is the user got refer
+      if (req.body.referBy) {
+        const referBy = req.body;
+
+        // Checking is valid refer
+        const referUser = await User.findOne({ referId });
+
+        if (referUser) {
+          balance = 50;
+          referUser.balance = referUser.balance + 50;
+          await referUser.save();
+        }
+      }
+
       // Creating new user
-      const user = await User.create({ name, email, password, photo });
+      const user = await User.create({
+        name,
+        email,
+        password,
+        photo,
+        referId,
+        balance,
+      });
 
       // confirm email token (valid for 20min)
       const confirmEmailToken = await user.getJwtConfirmEmailToken();
@@ -68,8 +94,33 @@ exports.createUser = async (req, res) => {
         message: "Email sent successfully, confirm email",
       });
     } else {
+      // ReferId
+      const referId = nanoid();
+      let balance = 0;
+
+      // Checking is the user got refer
+      if (req.body.referBy) {
+        const referBy = req.body;
+
+        // Checking is valid refer
+        const referUser = await User.findOne({ referBy });
+        console.log(referUser);
+
+        if (referUser) {
+          balance = 50;
+          referUser.balance = referUser.balance + 50;
+          await referUser.save();
+        }
+      }
+
       // Creating new user
-      const user = await User.create({ name, email, password });
+      const user = await User.create({
+        name,
+        email,
+        password,
+        referId,
+        balance,
+      });
 
       // confirm email token (valid for 20min)
       const confirmEmailToken = await user.getJwtConfirmEmailToken();

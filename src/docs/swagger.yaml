@@ -104,6 +104,12 @@ components:
         socialLoginId:
           type: string
           example: Id provided by social login
+        referId:
+          type: string
+          example: -f-G30c_YLixsr5w7OR3i
+        balance:
+          type: number
+          example: 0
         confirmEmailToken:
           type: string
         resetPasswordToken:
@@ -164,6 +170,10 @@ paths:
                   type: file
                   format: binary
                   description: The photo is optional but user can upload an image
+                referBy:
+                  type: string
+                  example: -f-G30c_YLixsr5w7OR3i
+                  description: If the user has got a refer so enter the refer Id both the user will get 50rs a refer bonus.
       responses:
         200:
           description: A user has been created and a verification email is also sent to verify user's email address
@@ -305,6 +315,12 @@ paths:
                         example: local
                       socialLoginId:
                         type: string
+                      referId:
+                        type: string
+                        example: -f-G30c_YLixsr5w7OR3i
+                      balance:
+                        type: number
+                        example: 0
                       createdAt:
                         type: string
                         format: date
@@ -900,6 +916,12 @@ paths:
                         example: local
                       socialLoginId:
                         type: string
+                      referId:
+                        type: string
+                        example: -f-G30c_YLixsr5w7OR3i
+                      balance:
+                        type: number
+                        example: 0
                       createdAt:
                         type: string
                         format: date
