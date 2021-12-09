@@ -56,3 +56,12 @@ exports.isLoggedIn = async (req, res, next) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+exports.customRole = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return customError(res, 401, "You are not allowed to use this");
+    }
+    next();
+  };
+};
