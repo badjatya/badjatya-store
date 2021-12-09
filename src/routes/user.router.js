@@ -50,6 +50,16 @@ router
   .route("/facebook/callback")
   .get(passport.authenticate("facebook"), socialLogin);
 
+// Github
+router.route("/github").get(
+  passport.authenticate("github", {
+    scope: ["user:email"],
+  })
+);
+router
+  .route("/github/callback")
+  .get(passport.authenticate("github"), socialLogin);
+
 router.route("/email/confirm/resend").get(isLoggedIn, confirmEmailResendToken);
 router.route("/email/confirm/:token").get(confirmEmail);
 router.route("/logout").get(isLoggedIn, logout);

@@ -27,8 +27,11 @@ app.use(
 if (process.env.ENVIRONMENT === "development") {
   app.use(morgan("dev"));
 }
+
+// Passport - Social logins
 const GoogleStrategy = require("./src/passport/google");
 const FacebookStrategy = require("./src/passport/facebook");
+const GitHubStrategy = require("./src/passport/github");
 app.use(passport.initialize());
 
 // Template engine
