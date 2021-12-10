@@ -4,7 +4,7 @@ const User = require("../models/user");
 const customError = require("../utils/customError");
 
 // Admin get all users
-exports.adminGetAllUsers = async (req, res) => {
+exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ role: "user" });
 
@@ -19,7 +19,7 @@ exports.adminGetAllUsers = async (req, res) => {
 };
 
 // Admin get all managers
-exports.adminGetAllManagers = async (req, res) => {
+exports.getAllManagers = async (req, res) => {
   try {
     const managers = await User.find({ role: "manager" });
 
@@ -27,6 +27,24 @@ exports.adminGetAllManagers = async (req, res) => {
       status: "success",
       result: managers.length,
       managers,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Admin get single user
+exports.getSingleUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return customError(res, 404, "User not found");
+    }
+
+    res.json({
+      status: "success",
+      user,
     });
   } catch (error) {
     customError(res, 500, error.message, "error");
