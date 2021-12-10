@@ -129,6 +129,7 @@ components:
           format: date
 
 paths:
+  # User
   /users/signup:
     post:
       tags:
@@ -1461,6 +1462,95 @@ paths:
                   message:
                     type: string
                     example: Token is either invalid or expired
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  # Admin
+  /admin/users:
+    get:
+      tags:
+        - Admin
+      summary: Admin can get list of all users and managers
+      responses:
+        200:
+          description: success, list of all users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  result:
+                    type: string
+                    example: 2
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        role:
+                          type: string
+                        isVerifiedUser:
+                          type: boolean
+                        accountCreatedUsing:
+                          type: string
+                        referId:
+                          type: string
+                        balance:
+                          type: number
+                        createdAt:
+                          type: string
+                          format: date
+                        updatedAt:
+                          type: string
+                          format: date
+                        __v:
+                          type: string
+        400:
+          description: Bad request, Token not found, please authenticate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Token not found, please authenticate
+        401:
+          description: Unauthorized, You are not allowed to use this
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: You are not allowed to use this
         500:
           description: Internal server error
           content:
