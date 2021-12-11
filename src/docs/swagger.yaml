@@ -80,6 +80,9 @@ components:
             - user
             - admin
             - manager
+            - userManager
+            - productManager
+            - orderManager
           example: user
         isVerifiedUser:
           type: boolean
@@ -1904,6 +1907,460 @@ paths:
                   message:
                     type: string
                     example: Admin can not remove a admin
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: User not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  # Manager
+  /manager/users:
+    get:
+      tags:
+        - Manager
+      summary: Manager can get list of all users
+      responses:
+        200:
+          description: success, list of all users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  result:
+                    type: string
+                    example: 2
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        role:
+                          type: string
+                        isVerifiedUser:
+                          type: boolean
+                        accountCreatedUsing:
+                          type: string
+                        referId:
+                          type: string
+                        balance:
+                          type: number
+                        createdAt:
+                          type: string
+                          format: date
+                        updatedAt:
+                          type: string
+                          format: date
+                        __v:
+                          type: string
+        400:
+          description: Bad request, Token not found, please authenticate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Token not found, please authenticate
+        401:
+          description: Unauthorized, You are not allowed to use this
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: You are not allowed to use this
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /manager/users/managers:
+    get:
+      tags:
+        - Manager
+      summary: Manager can get list of all sub managers
+      responses:
+        200:
+          description: success, list of all sub managers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  result:
+                    type: string
+                    example: 2
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        role:
+                          type: string
+                        isVerifiedUser:
+                          type: boolean
+                        accountCreatedUsing:
+                          type: string
+                        referId:
+                          type: string
+                        balance:
+                          type: number
+                        createdAt:
+                          type: string
+                          format: date
+                        updatedAt:
+                          type: string
+                          format: date
+                        __v:
+                          type: string
+        400:
+          description: Bad request, Token not found, please authenticate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Token not found, please authenticate
+        401:
+          description: Unauthorized, You are not allowed to use this
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: You are not allowed to use this
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /manager/users/{id}:
+    get:
+      tags:
+        - Manager
+      summary: Manager can get detail of user based on id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+          default: 61b1d30fc943184620bc4e58
+          description: Enter id of the user
+      responses:
+        200:
+          description: success, user details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      role:
+                        type: string
+                      isVerifiedUser:
+                        type: boolean
+                      accountCreatedUsing:
+                        type: string
+                      referId:
+                        type: string
+                      balance:
+                        type: number
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+                      __v:
+                        type: string
+        400:
+          description: Bad request, Token not found, please authenticate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Token not found, please authenticate
+        401:
+          description: Unauthorized, You are not allowed to use this
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: You are not allowed to use this
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: User not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+    patch:
+      tags:
+        - Manager
+      summary: Manager can update the role of user based on id but manager can not make a user a admin or manager
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+          default: 61b1d30fc943184620bc4e58
+          description: Enter id of the user whose role you want to update
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - role
+              properties:
+                role:
+                  type: string
+                  enum:
+                    - user
+                    - userManager
+                    - productManager
+                    - orderManager
+                  description: Enter the role of the user
+                  default: user
+      responses:
+        200:
+          description: success, user role updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User role updated successfully
+        400:
+          description: Bad request, To update the role of a user, role is required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: To update the role of a user, role is required
+        401:
+          description: Unauthorized, Manger can not update a user to admin or manager
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Manager can not update a user to admin or manager
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: User not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+    delete:
+      tags:
+        - Manager
+      summary: Manager can delete the user based on id but manager can not remove an admin or a manager
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+          default: 61b1d30fc943184620bc4e58
+          description: Enter id of the user whose role you want to update
+      responses:
+        200:
+          description: success, user removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User deleted successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: bad request
+        401:
+          description: Unauthorized, Manager can not remove an admin or a manager
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Manager can not remove an admin or a manager
         404:
           description: User not found
           content:
