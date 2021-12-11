@@ -5,6 +5,7 @@ const {
   getAllUsers,
   getAllManagers,
   getSingleUser,
+  updateSingleUser,
 } = require("../controllers/admin.controller");
 
 // User middleware
@@ -12,11 +13,17 @@ const { isLoggedIn, customRole } = require("../middlewares/user");
 
 // Routes
 
+// Admin getting all users
 router.route("/users").get(isLoggedIn, customRole("admin"), getAllUsers);
+// Admin getting all managers
 router
   .route("/users/managers")
   .get(isLoggedIn, customRole("admin"), getAllManagers);
 
-router.route("/users/:id").get(isLoggedIn, customRole("admin"), getSingleUser);
+// Admin getting, updating and deleting single user
+router
+  .route("/users/:id")
+  .get(isLoggedIn, customRole("admin"), getSingleUser)
+  .patch(isLoggedIn, customRole("admin"), updateSingleUser);
 
 module.exports = router;
