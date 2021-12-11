@@ -1852,3 +1852,81 @@ paths:
                   message:
                     type: string
                     example: error message
+    delete:
+      tags:
+        - Admin
+      summary: Admin can delete the user based on id but admin can not remove an admin
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+          default: 61b1d30fc943184620bc4e58
+          description: Enter id of the user whose role you want to update
+      responses:
+        200:
+          description: success, user removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User deleted successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: bad request
+        401:
+          description: Unauthorized, Admin can not remove a admin
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Admin can not remove a admin
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: User not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
