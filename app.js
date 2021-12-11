@@ -42,6 +42,7 @@ app.set("views", "./src/views");
 app.use("/", require("./src/routes/home.router"));
 app.use("/api/v1/users", require("./src/routes/user.router"));
 app.use("/api/v1/admin", require("./src/routes/admin.router"));
+app.use("/api/v1/manager", require("./src/routes/manager.router"));
 
 // Exporting app
 module.exports = app;

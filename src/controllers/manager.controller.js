@@ -6,7 +6,7 @@ const cloudinary = require("cloudinary");
 // Utils
 const customError = require("../utils/customError");
 
-// Admin get all users
+// Manager get all users
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ role: "user" });
@@ -21,10 +21,12 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// Admin get all managers
+// Manager get all managers
 exports.getAllManagers = async (req, res) => {
   try {
-    const managers = await User.find({ role: { $nin: ["user", "admin"] } });
+    const managers = await User.find({
+      role: { $nin: ["user", "admin", "manager"] },
+    });
 
     res.json({
       status: "success",
@@ -36,7 +38,7 @@ exports.getAllManagers = async (req, res) => {
   }
 };
 
-// Admin get single user
+// Manager get single user
 exports.getSingleUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -54,7 +56,7 @@ exports.getSingleUser = async (req, res) => {
   }
 };
 
-// Admin updating single user
+// Manager updating single user
 exports.updateSingleUser = async (req, res) => {
   try {
     const role = req.body.role;
@@ -67,9 +69,11 @@ exports.updateSingleUser = async (req, res) => {
       );
     }
 
-    // Not allowing admin to update role of user to admin
+    // Not allowing manager to update role of user to admin or manager
     if (role === "admin") {
-      return customError(res, 401, "Admin can not update a user to admin");
+      return customError(res, 401, "Manager can not update a user to admin");
+    } else if (role === "manager") {
+      return customError(res, 401, "Manager can not update a user to manager");
     }
 
     const user = await User.findByIdAndUpdate(
@@ -95,7 +99,7 @@ exports.updateSingleUser = async (req, res) => {
   }
 };
 
-// Admin deleting single user
+// Manager deleting single user
 exports.deleteSingleUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -105,9 +109,11 @@ exports.deleteSingleUser = async (req, res) => {
       return customError(res, 404, "User not found");
     }
 
-    // If user is admin than he can not remove admin
+    // If user is manager than he can not remove admin or manager
     if (user.role === "admin") {
-      return customError(res, 401, "Admin can not remove a admin");
+      return customError(res, 401, "Manager can not remove an admin");
+    } else if (user.role === "manager") {
+      return customError(res, 401, "Manager can not remove a manager");
     }
 
     // Checking is user have photo if photo present than deleting

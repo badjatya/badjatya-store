@@ -31,7 +31,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "user",
       enum: {
-        values: ["user", "admin", "manager"],
+        values: [
+          "user",
+          "admin",
+          "manager",
+          "userManager",
+          "productManager",
+          "orderManager",
+        ],
         message: "Please select from this category",
       },
     },
