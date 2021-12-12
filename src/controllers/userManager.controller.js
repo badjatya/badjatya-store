@@ -6,7 +6,7 @@ const cloudinary = require("cloudinary");
 // Utils
 const customError = require("../utils/customError");
 
-// Manager get all users
+// userManager get all users
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ role: "user" });
@@ -21,27 +21,10 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// Manager get all managers
-exports.getAllManagers = async (req, res) => {
-  try {
-    const managers = await User.find({
-      role: { $nin: ["user", "admin", "manager"] },
-    });
-
-    res.json({
-      status: "success",
-      result: managers.length,
-      managers,
-    });
-  } catch (error) {
-    customError(res, 500, error.message, "error");
-  }
-};
-
-// Manager get single user
+// userManager get single user
 exports.getSingleUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findOne({ _id: req.params.id, role: "user" });
 
     if (!user) {
       return customError(res, 404, "User not found");
@@ -56,50 +39,39 @@ exports.getSingleUser = async (req, res) => {
   }
 };
 
-// Manager updating single user
+// userManager updating single user
 exports.updateSingleUser = async (req, res) => {
   try {
-    const role = req.body.role;
-
-    if (!role) {
-      return customError(
-        res,
-        400,
-        "To update the role of a user, role is required"
-      );
-    }
-
-    // Not allowing manager to update role of user to admin or manager
-    if (role === "admin") {
-      return customError(res, 401, "Manager can not update a user to admin");
-    } else if (role === "manager") {
-      return customError(res, 401, "Manager can not update a user to manager");
-    }
-
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      { role },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const user = await User.findById(req.params.id);
 
     // If user not found
     if (!user) {
       return customError(res, 404, "User not found");
     }
 
+    // Updating user
+    await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name || user.name,
+        email: req.body.email || user.email,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
     res.json({
       status: "success",
-      message: "User role updated successfully",
+      message: "User updated successfully",
     });
   } catch (error) {
     customError(res, 500, error.message, "error");
   }
 };
 
-// Manager deleting single user
+// userManager deleting single user
 exports.deleteSingleUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -109,25 +81,27 @@ exports.deleteSingleUser = async (req, res) => {
       return customError(res, 404, "User not found");
     }
 
-    // If user is manager than he can not remove admin or manager
-    if (user.role === "admin") {
-      return customError(res, 401, "Manager can not remove an admin");
-    } else if (user.role === "manager") {
-      return customError(res, 401, "Manager can not remove a manager");
+    // userManager can only remove a user
+    if (user.role === "user") {
+      // Checking is user have photo if photo present than deleting
+      if (user.photo.publicId) {
+        await cloudinary.v2.uploader.destroy(user.photo.publicId);
+      }
+
+      // Removing user
+      await user.remove();
+
+      res.json({
+        status: "success",
+        message: "User deleted successfully",
+      });
+    } else {
+      return customError(
+        res,
+        401,
+        "userManager can not remove an admin or manager"
+      );
     }
-
-    // Checking is user have photo if photo present than deleting
-    if (user.photo.publicId) {
-      await cloudinary.v2.uploader.destroy(user.photo.publicId);
-    }
-
-    // Removing user
-    await user.remove();
-
-    res.json({
-      status: "success",
-      message: "User deleted successfully",
-    });
   } catch (error) {
     customError(res, 500, error.message, "error");
   }
