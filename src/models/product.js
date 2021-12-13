@@ -26,14 +26,9 @@ const productSchema = new mongoose.Schema({
       "A product long description must be less than 500 characters",
     ],
   },
-  regularPrice: {
+  price: {
     type: Number,
     required: [true, "A product must contain a price"],
-    min: 0,
-  },
-  discountedPrice: {
-    type: Number,
-    default: 0,
     min: 0,
   },
   mrp: {
@@ -70,6 +65,30 @@ const productSchema = new mongoose.Schema({
     trim: true,
     maxlength: [150, "A product care method must be less than 150 characters"],
   },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: [true, "A product must contain a category"],
+    ref: "Category",
+  },
+  brand: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: [true, "A product must contain a brand"],
+    ref: "Brand",
+  },
+  sizes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "A product must contain images"],
+      ref: "Size",
+    },
+  ],
+  images: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "A product must contain images"],
+      ref: "Image",
+    },
+  ],
   rating: {
     type: Number,
     default: 0,
