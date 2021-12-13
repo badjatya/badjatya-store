@@ -29,7 +29,7 @@ exports.addCategory = async (req, res) => {
 
     // Checking is category already exist
     const categoryExist = await Category.findOne({
-      categoryName,
+      categoryName: categoryName.toLowerCase(),
       categoryType,
       gender,
     });
@@ -44,6 +44,7 @@ exports.addCategory = async (req, res) => {
       categoryName,
       categoryType,
       gender,
+      createdBy: req.user._id,
     });
 
     res.status(201).json({
@@ -75,7 +76,11 @@ exports.addBrand = async (req, res) => {
     }
 
     // Creating new brand
-    const brand = await Brand.create({ name, description });
+    const brand = await Brand.create({
+      name: name.toLowerCase(),
+      description,
+      createdBy: req.user._id,
+    });
 
     res.status(201).json({
       status: "success",

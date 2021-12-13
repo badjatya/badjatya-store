@@ -2751,3 +2751,213 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  # Product
+  /product/category:
+    post:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can create a new category, required categoryName, categoryType and gender
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - categoryName
+                - categoryType
+                - gender
+              properties:
+                categoryName:
+                  type: string
+                  default: Shirt
+                  description: Enter the name of the category
+                  required: true
+                categoryType:
+                  type: string
+                  default: top wear
+                  description: Enter the type of the category
+                  required: true
+                  enum:
+                    - top wear
+                    - bottom wear
+                    - accessories
+                    - ethnic fusion wear
+                    - regional wear
+                gender:
+                  type: string
+                  default: Women
+                  description: Enter the gender
+                  required: true
+                  enum:
+                    - Men
+                    - Women
+                    - Boy
+                    - Girl
+      responses:
+        201:
+          description: success, Category created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  category:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      categoryName:
+                        type: string
+                      categoryType:
+                        type: string
+                      gender:
+                        type: string
+                      createdBy:
+                        type: string
+                      __v:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+        400:
+          description: Bad request, A category must contain categoryName, categoryType and gender
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: A category must contain categoryName, categoryType and gender
+        401:
+          description: Unauthorized, Category already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Category already exists
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /product/brand:
+    post:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can create a new brand, required name and description
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+              properties:
+                name:
+                  type: string
+                  default: Badjatya
+                  description: Enter the name of the brand
+                  required: true
+                description:
+                  type: string
+                  default: A good brand
+                  description: Enter the description about the brand
+                  required: true
+      responses:
+        201:
+          description: success, Brand created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  category:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      createdBy:
+                        type: string
+                      __v:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+        400:
+          description: Bad request, A brand must contain name and description
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: A brand must contain name and description
+        401:
+          description: Unauthorized, Brand already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Brand already exists
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
