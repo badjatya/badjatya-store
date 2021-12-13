@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const brandSchema = new mongoose.Schema({
   name: {
     type: String,
+    lowercase: true,
     required: [true, "A brand must contain a name"],
     trim: true,
   },

@@ -14,7 +14,7 @@ const cloudinary = require("cloudinary");
 const customError = require("../utils/customError");
 
 // Creating category
-exports.createCategory = async (req, res) => {
+exports.addCategory = async (req, res) => {
   try {
     const { categoryName, categoryType, gender } = req.body;
 
@@ -23,7 +23,7 @@ exports.createCategory = async (req, res) => {
       return customError(
         res,
         400,
-        "A category must contain categoryName, categoryType adn gender"
+        "A category must contain categoryName, categoryType and gender"
       );
     }
 
@@ -33,7 +33,6 @@ exports.createCategory = async (req, res) => {
       categoryType,
       gender,
     });
-    console.log(categoryExist === null);
 
     // If category already present in DB
     if (categoryExist) {
@@ -51,6 +50,37 @@ exports.createCategory = async (req, res) => {
       status: "success",
       message: "Category created",
       category,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Creating Brand
+exports.addBrand = async (req, res) => {
+  try {
+    const { name, description } = req.body;
+
+    // Checking all the fields
+    if (!name || !description) {
+      return customError(res, 400, "A brand must contain name and description");
+    }
+
+    // Checking is brand already exist
+    const brandExist = await Brand.findOne({ name });
+
+    // If brand already present in DB
+    if (brandExist) {
+      return customError(res, 401, "Brand already exists");
+    }
+
+    // Creating new brand
+    const brand = await Brand.create({ name, description });
+
+    res.status(201).json({
+      status: "success",
+      message: "Brand created",
+      brand,
     });
   } catch (error) {
     customError(res, 500, error.message, "error");

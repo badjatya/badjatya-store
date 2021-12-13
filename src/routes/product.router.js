@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 // product Controller
-const { createCategory } = require("../controllers/product.controller");
+const { addCategory, addBrand } = require("../controllers/product.controller");
 
 // User middleware
 const { isLoggedIn, customRole } = require("../middlewares/user");
@@ -9,6 +9,17 @@ const { isLoggedIn, customRole } = require("../middlewares/user");
 // * Routes
 
 // Category routes
-router.route("/category").post(isLoggedIn, customRole("admin"), createCategory);
+router
+  .route("/category")
+  .post(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    addCategory
+  );
+
+// Brand routes
+router
+  .route("/brand")
+  .post(isLoggedIn, customRole("admin", "manager", "productManager"), addBrand);
 
 module.exports = router;
