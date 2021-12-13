@@ -13,9 +13,11 @@ const sizeSchema = new mongoose.Schema({
   //   },
   colors: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Color",
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Color",
+      },
     },
   ],
 });

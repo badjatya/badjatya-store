@@ -77,16 +77,20 @@ const productSchema = new mongoose.Schema({
   },
   sizes: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      required: [true, "A product must contain images"],
-      ref: "Size",
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, "A product must contain images"],
+        ref: "Size",
+      },
     },
   ],
   images: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      required: [true, "A product must contain images"],
-      ref: "Image",
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, "A product must contain images"],
+        ref: "Image",
+      },
     },
   ],
   rating: {

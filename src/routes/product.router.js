@@ -1,7 +1,11 @@
 const router = require("express").Router();
 
 // product Controller
-const { addCategory, addBrand } = require("../controllers/product.controller");
+const {
+  addCategory,
+  addBrand,
+  addProduct,
+} = require("../controllers/product.controller");
 
 // User middleware
 const { isLoggedIn, customRole } = require("../middlewares/user");
@@ -21,5 +25,14 @@ router
 router
   .route("/brand")
   .post(isLoggedIn, customRole("admin", "manager", "productManager"), addBrand);
+
+// Product routes
+router
+  .route("/")
+  .post(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    addProduct
+  );
 
 module.exports = router;
