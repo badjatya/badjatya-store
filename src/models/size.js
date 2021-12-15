@@ -2,21 +2,14 @@ const mongoose = require("mongoose");
 
 // Size schema
 const sizeSchema = new mongoose.Schema({
-  size: {
-    type: String,
-    required: [true, "A product must contain a size"],
-    trim: true,
-  },
-  //   quantity: {
-  //     type: Number,
-  //     required: [true, "Enter the number of quantity"],
-  //   },
-  colors: [
+  sizes: [
     {
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "Color",
+      type: String,
+      required: [true, "A product must contain size"],
+      lowercase: true,
+      enum: {
+        values: ["s", "m", "l", "xl", "xxl"],
+        message: "Please enter correct size",
       },
     },
   ],

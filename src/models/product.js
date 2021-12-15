@@ -77,13 +77,30 @@ const productSchema = new mongoose.Schema({
   },
   sizes: [
     {
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: [true, "A product must contain images"],
-        ref: "Size",
+      type: String,
+      required: [true, "A product must contain size"],
+      default: "s",
+      lowercase: true,
+      enum: {
+        values: ["s", "m", "l", "xl", "xxl"],
+        message: "Please enter correct size",
       },
     },
   ],
+  colors: [
+    {
+      type: String,
+      required: [true, "Enter the hex code of the color"],
+      default: "#000",
+      trim: true,
+    },
+  ],
+  stock: {
+    type: Number,
+    required: [true, "A product must have a stock"],
+    default: 0,
+    min: 0,
+  },
   images: [
     {
       id: {

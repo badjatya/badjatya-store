@@ -5,7 +5,6 @@ const Image = require("../models/image");
 const Brand = require("../models/brand");
 const Category = require("../models/category");
 const Size = require("../models/size");
-const Color = require("../models/color");
 
 // Lib
 const cloudinary = require("cloudinary");
@@ -104,7 +103,7 @@ exports.addProduct = async (req, res) => {
       clothMaterial,
       careMethod,
       brand,
-      sizes,
+      stock,
       categoryName,
       categoryType,
       gender,
@@ -120,7 +119,7 @@ exports.addProduct = async (req, res) => {
       !clothMaterial ||
       !careMethod ||
       !brand ||
-      !sizes ||
+      !stock ||
       !categoryName ||
       !categoryType ||
       !gender
@@ -128,7 +127,7 @@ exports.addProduct = async (req, res) => {
       return customError(
         res,
         400,
-        "A Product must contain name, shortDescription,longDescription,price,mrp,thumbnail,clothMaterial,careMethod,brand,sizes,images and category"
+        "A Product must contain name, shortDescription, longDescription, price, mrp, thumbnail, clothMaterial, careMethod, brand,stock, images and category"
       );
     }
 
@@ -153,35 +152,6 @@ exports.addProduct = async (req, res) => {
     // If category is not present in DB
     if (!categoryExist) {
       return customError(res, 401, "Category does not exists");
-    }
-
-    // Creating Size and color also storing in DB
-    const sizesArrayDB = [];
-    for (let i = 0; i < sizes.length; i++) {
-      const colors = [];
-
-      // Storing color in color DB
-      for (let j = 0; j < sizes[i].colors.length; j++) {
-        const color = await Color.create({
-          name: sizes[i].colors[j].name,
-          hexCode: sizes[i].colors[j].hexCode,
-          quantity: sizes[i].colors[j].quantity,
-        });
-
-        colors.push({
-          _id: color._id,
-        });
-      }
-
-      // Storing size
-      const size = await Size.create({
-        size: sizes[i].size,
-        colors,
-      });
-
-      sizesArrayDB.push({
-        _id: size._id,
-      });
     }
 
     // Saving Photos
@@ -217,7 +187,7 @@ exports.addProduct = async (req, res) => {
 
     // Saving to db
     const images = [];
-    imageArray.map((img) => {
+    imageArray.map(async (img) => {
       const image = await Image.create({
         publicId: img.id,
         secureUrl: img.secureUrl,
@@ -226,12 +196,17 @@ exports.addProduct = async (req, res) => {
     });
 
     // Saving thumbnail
-    const thumbnail = await cloudinary.v2.uploader.upload(
+    const result = await cloudinary.v2.uploader.upload(
       req.files.thumbnail.tempFilePath,
       {
         folder: "badjatya-store/products",
       }
     );
+
+    const thumbnail = {
+      pubicId: result.public_id,
+      secureUrl: result.secure_url,
+    };
 
     // Creating Product
     const product = await Product.create({
@@ -242,13 +217,10 @@ exports.addProduct = async (req, res) => {
       mrp,
       clothMaterial,
       careMethod,
-      thumbnail: {
-        publicId: thumbnail.public_id,
-        secureUrl: thumbnail.secure_url,
-      },
+      thumbnail,
       category: categoryExist._id,
       brand: brandExist._id,
-      sizes,
+      stock,
       images,
     });
 
@@ -258,6 +230,7 @@ exports.addProduct = async (req, res) => {
       product,
     });
   } catch (error) {
+    console.log(error);
     customError(res, 500, error.message, "error");
   }
 };

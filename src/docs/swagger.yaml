@@ -2961,3 +2961,183 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  /product:
+    post:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can create a new product
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - shortDescription
+                - longDescription
+                - price
+                - mrp
+                - clothMaterial
+                - careMethod
+                - brand
+                - categoryName
+                - categoryType
+                - gender
+                - stock
+                - images
+                - thumbnail
+              properties:
+                name:
+                  type: string
+                  default: Product One
+                  description: Enter the name of the product
+                  required: true
+                shortDescription:
+                  type: string
+                  default: A good product
+                  description: Enter the short description of the product
+                  required: true
+                longDescription:
+                  type: string
+                  default: A good product at a cheap rate
+                  description: Enter the long description of the product
+                  required: true
+                price:
+                  type: number
+                  default: 599
+                  description: Enter the price of the product
+                  required: true
+                mrp:
+                  type: number
+                  default: 799
+                  description: Enter the mrp of the product
+                  required: true
+                clothMaterial:
+                  type: string
+                  default: Silk
+                  description: Enter the cloth material of the product
+                  required: true
+                careMethod:
+                  type: string
+                  default: Wash, rinse
+                  description: Enter the care method of the product
+                  required: true
+                brand:
+                  type: string
+                  default: Badjatya
+                  description: Enter the brand of the product
+                  required: true
+                categoryName:
+                  type: string
+                  default: Shirt
+                  description: Enter the name of the category for the product
+                  required: true
+                categoryType:
+                  type: string
+                  default: top wear
+                  description: Enter the type of the category for the product
+                  required: true
+                  enum:
+                    - top wear
+                    - bottom wear
+                    - accessories
+                    - ethnic fusion wear
+                    - regional wear
+                gender:
+                  type: string
+                  default: Women
+                  description: Enter the gender
+                  required: true
+                  enum:
+                    - Men
+                    - Women
+                    - Boy
+                    - Girl
+                stock:
+                  type: number
+                  description: Enter the stock of the product
+                  min: 0
+                  default: 10
+                thumbnail:
+                  type: file
+                  format: binary
+                  in: formData
+                  description: Enter the thumbnail of the product
+                images:
+                  type: array
+                  description: The upload product images
+                  items:
+                    in: formData
+                    type: file
+                    format: binary
+      responses:
+        201:
+          description: success, Brand created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  category:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      createdBy:
+                        type: string
+                      __v:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+        400:
+          description: Bad request, A brand must contain name and description
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: A brand must contain name and description
+        401:
+          description: Unauthorized, Brand already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Brand already exists
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
