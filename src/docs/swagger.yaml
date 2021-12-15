@@ -130,6 +130,134 @@ components:
         updatedAt:
           type: string
           format: date
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 61a24ff7ca438a5a347730f0
+        name:
+          type: string
+          example: Product name
+        shortDescription:
+          type: string
+          example: This is a good product
+        longDescription:
+          type: string
+          example: This is a very very good product
+        price:
+          type: number
+          example: 599
+        mrp:
+          type: number
+          example: 799
+        inStock:
+          type: boolean
+          example: true
+        thumbnail:
+          type: object
+          properties:
+            publicId:
+              type: string
+            secureUrl:
+              type: string
+        clothMaterial:
+          type: string
+          example: silk
+        careMethod:
+          type: string
+          example: wash daily
+        category:
+          type: string
+          example: 61a24ff7ca438a5a347730f0
+        user:
+          type: string
+          example: 61a24ff7ca438a5a347730f0
+        brand:
+          type: string
+          example: 61a24ff7ca438a5a347730f0
+        sizes:
+          type: array
+          items:
+            type: string
+            example: ["s", "l"]
+        colors:
+          type: array
+          items:
+            type: string
+            example: ["#000", "#fff"]
+        stock:
+          type: number
+          example: 10
+        images:
+          type: array
+          items:
+            type: object
+            properties:
+              publicId:
+                type: string
+              secureUrl:
+                type: string
+        rating:
+          type: number
+          example: 4.5
+        numberOfReviews:
+          type: number
+          example: 10
+        __v:
+          type: string
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+    Category:
+      type: object
+      properties:
+        categoryName:
+          type: string
+          example: T-Shirt
+        gender:
+          type: string
+          example: Men
+          enum:
+            - Men
+            - Women
+            - Boy
+            - Girl
+        categoryType:
+          type: string
+          example: top wear
+          enum:
+            - top wear
+            - bottom wear
+            - accessories
+            - ethnic fusion wear
+            - regional
+        createdBy:
+          type: string
+          example: 61a24ff7ca438a5a347730f0
+    Brand:
+      name:
+        type: string
+        example: Nike
+      description:
+        type: string
+        example: Its a nice brand
+      active:
+        type: boolean
+        example: true
+      createdBy:
+        type: boolean
+        example: 61a24ff7ca438a5a347730f0
+    Image:
+      type: object
+      properties:
+        publicId:
+          type: string
+        secureUrl:
+          type: string
 
 paths:
   # User
