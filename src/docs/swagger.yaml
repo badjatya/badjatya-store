@@ -2994,6 +2994,173 @@ paths:
                   message:
                     type: string
                     example: error message
+    get:
+      tags:
+        - Product
+      summary: A logged in user can get list of all categories
+      responses:
+        200:
+          description: success, Category list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  categories:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        categoryName:
+                          type: string
+                        categoryType:
+                          type: string
+                        gender:
+                          type: string
+                        createdBy:
+                          type: string
+                        __v:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date
+                        updatedAt:
+                          type: string
+                          format: date
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /product/category/{id}:
+    get:
+      tags:
+        - Product
+      summary: A logged in user can get details of category based on Id
+      parameters:
+        - name: id
+          required: true
+          description: Enter the category id
+          in: path
+          default: 61b752aef305de70ea23ff86
+      responses:
+        200:
+          description: success, Category details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  category:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      categoryName:
+                        type: string
+                      categoryType:
+                        type: string
+                      gender:
+                        type: string
+                      createdBy:
+                        type: string
+                      __v:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Category your looking for not found, please try different id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Category your looking for not found, please try different id
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
 
   /product/brand:
     post:

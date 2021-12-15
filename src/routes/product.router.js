@@ -6,6 +6,8 @@ const {
   addBrand,
   addProduct,
   updateProduct,
+  getAllCategory,
+  getSingleCategory,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -16,11 +18,13 @@ const { isLoggedIn, customRole } = require("../middlewares/user");
 // Category routes
 router
   .route("/category")
+  .get(isLoggedIn, getAllCategory)
   .post(
     isLoggedIn,
     customRole("admin", "manager", "productManager"),
     addCategory
   );
+router.route("/category/:id").get(isLoggedIn, getSingleCategory);
 
 // Brand routes
 router

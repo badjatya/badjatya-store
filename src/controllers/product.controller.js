@@ -55,6 +55,45 @@ exports.addCategory = async (req, res) => {
   }
 };
 
+// Get ALl Category
+exports.getAllCategory = async (req, res) => {
+  try {
+    // Getting all category
+    const categories = await Category.find({});
+
+    res.status(200).json({
+      status: "success",
+      categories,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Get single Category
+exports.getSingleCategory = async (req, res) => {
+  try {
+    // Getting all category
+    const category = await Category.findById(req.params.id);
+
+    // If category not found
+    if (!category) {
+      return customError(
+        res,
+        404,
+        "Category your looking for not found, please try different id"
+      );
+    }
+
+    res.status(200).json({
+      status: "success",
+      category,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
 // Creating Brand
 exports.addBrand = async (req, res) => {
   try {
