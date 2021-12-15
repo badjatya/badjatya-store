@@ -3161,6 +3161,181 @@ paths:
                   message:
                     type: string
                     example: error message
+    patch:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can update the category based on id
+      parameters:
+        - name: id
+          required: true
+          description: Enter the category id
+          in: path
+          default: 61b752aef305de70ea23ff86
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                categoryName:
+                  type: string
+                  default: Shirt
+                  description: Enter the name of the category
+                categoryType:
+                  type: string
+                  default: top wear
+                  description: Enter the type of the category
+                  enum:
+                    - top wear
+                    - bottom wear
+                    - accessories
+                    - ethnic fusion wear
+                    - regional wear
+                gender:
+                  type: string
+                  default: Women
+                  description: Enter the gender
+                  enum:
+                    - Men
+                    - Women
+                    - Boy
+                    - Girl
+      responses:
+        200:
+          description: success, Category updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                    example: Category updated successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Category your looking for not found, please try different id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Category your looking for not found, please try different id
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+    delete:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can delete the category based on id
+      parameters:
+        - name: id
+          required: true
+          description: Enter the category id
+          in: path
+          default: 61b752aef305de70ea23ff86
+      responses:
+        200:
+          description: success, Category deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                    example: Category deleted successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Category your looking for not found, please try different id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Category your looking for not found, please try different id
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
 
   /product/brand:
     post:

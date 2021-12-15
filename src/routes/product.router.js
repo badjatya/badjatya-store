@@ -8,6 +8,8 @@ const {
   updateProduct,
   getAllCategory,
   getSingleCategory,
+  updateCategory,
+  deleteCategory,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -24,7 +26,20 @@ router
     customRole("admin", "manager", "productManager"),
     addCategory
   );
-router.route("/category/:id").get(isLoggedIn, getSingleCategory);
+
+router
+  .route("/category/:id")
+  .get(isLoggedIn, getSingleCategory)
+  .patch(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    updateCategory
+  )
+  .delete(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    deleteCategory
+  );
 
 // Brand routes
 router

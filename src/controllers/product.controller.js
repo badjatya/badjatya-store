@@ -73,8 +73,72 @@ exports.getAllCategory = async (req, res) => {
 // Get single Category
 exports.getSingleCategory = async (req, res) => {
   try {
-    // Getting all category
+    // Getting single category
     const category = await Category.findById(req.params.id);
+
+    // If category not found
+    if (!category) {
+      return customError(
+        res,
+        404,
+        "Category your looking for not found, please try different id"
+      );
+    }
+
+    // response
+    res.status(200).json({
+      status: "success",
+      category,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Update Category
+exports.updateCategory = async (req, res) => {
+  try {
+    // Getting single category
+    const category = await Category.findById(req.params.id);
+
+    // If category not found
+    if (!category) {
+      return customError(
+        res,
+        404,
+        "Category your looking for not found, please try different id"
+      );
+    }
+
+    // Updating category
+    await Category.findByIdAndUpdate(
+      req.params.id,
+      {
+        categoryName: req.body.categoryName || category.categoryName,
+        categoryType: req.body.categoryType || category.categoryType,
+        gender: req.body.gender || category.gender,
+        createdBy: req.user._id,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    res.status(200).json({
+      status: "success",
+      message: "Category updated successfully",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Delete Category
+exports.deleteCategory = async (req, res) => {
+  try {
+    // Deleting category
+    const category = await Category.findByIdAndDelete(req.params.id);
 
     // If category not found
     if (!category) {
@@ -87,7 +151,7 @@ exports.getSingleCategory = async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      category,
+      message: "Category deleted successfully",
     });
   } catch (error) {
     customError(res, 500, error.message, "error");
