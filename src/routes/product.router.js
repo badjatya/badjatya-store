@@ -5,6 +5,7 @@ const {
   addCategory,
   addBrand,
   addProduct,
+  updateProduct,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -33,6 +34,14 @@ router
     isLoggedIn,
     customRole("admin", "manager", "productManager"),
     addProduct
+  );
+
+router
+  .route("/:id")
+  .patch(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    updateProduct
   );
 
 module.exports = router;

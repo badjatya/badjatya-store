@@ -4,7 +4,6 @@ const Product = require("../models/product");
 const Image = require("../models/image");
 const Brand = require("../models/brand");
 const Category = require("../models/category");
-const Size = require("../models/size");
 
 // Lib
 const cloudinary = require("cloudinary");
@@ -217,11 +216,14 @@ exports.addProduct = async (req, res) => {
       mrp,
       clothMaterial,
       careMethod,
+      user: req.user._id,
       thumbnail,
       category: categoryExist._id,
       brand: brandExist._id,
       stock,
       images,
+      sizes: ["s", "m", "l"],
+      colors: ["#000", "#fff", "#333"],
     });
 
     res.status(201).json({
@@ -230,7 +232,49 @@ exports.addProduct = async (req, res) => {
       product,
     });
   } catch (error) {
-    console.log(error);
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Update Product
+exports.updateProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    // If product not found
+    if (!product) {
+      return customError(res, 404, "Product not found");
+    }
+
+    // Updating product
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name || product.name,
+        shortDescription: req.body.shortDescription || product.shortDescription,
+        longDescription: req.body.longDescription || product.longDescription,
+        price: req.body.price || product.price,
+        mrp: req.body.mrp || product.mrp,
+        inStock: req.body.inStock || product.inStock,
+        clothMaterial: req.body.clothMaterial || product.clothMaterial,
+        careMethod: req.body.careMethod || product.careMethod,
+        user: req.user._id,
+        sizes: req.body.sizes || product.sizes,
+        colors: req.body.colors || product.colors,
+        stock: req.body.stock || product.stock,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    // Response
+    res.json({
+      status: "success",
+      message: "Product updated successfully",
+    });
+  } catch (error) {
     customError(res, 500, error.message, "error");
   }
 };

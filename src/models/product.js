@@ -70,6 +70,11 @@ const productSchema = new mongoose.Schema({
     required: [true, "A product must contain a category"],
     ref: "Category",
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: [true, "A product must contain a user who created or updated"],
+    ref: "User",
+  },
   brand: {
     type: mongoose.Schema.Types.ObjectId,
     required: [true, "A product must contain a brand"],
@@ -79,7 +84,6 @@ const productSchema = new mongoose.Schema({
     {
       type: String,
       required: [true, "A product must contain size"],
-      default: "s",
       lowercase: true,
       enum: {
         values: ["s", "m", "l", "xl", "xxl"],
@@ -91,7 +95,6 @@ const productSchema = new mongoose.Schema({
     {
       type: String,
       required: [true, "Enter the hex code of the color"],
-      default: "#000",
       trim: true,
     },
   ],
