@@ -226,6 +226,7 @@ exports.addProduct = async (req, res) => {
       colors: ["#000", "#fff", "#333"],
     });
 
+    // Response
     res.status(201).json({
       status: "success",
       message: "Product created",

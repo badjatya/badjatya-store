@@ -3073,27 +3073,73 @@ paths:
                     format: binary
       responses:
         201:
-          description: success, Brand created
+          description: success, new product created
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   status:
-                    type: string
+                    type: success
                   message:
-                    type: string
-                  category:
+                    type: Product created
+                  product:
                     type: object
                     properties:
                       _id:
                         type: string
                       name:
                         type: string
-                      description:
+                      shortDescription:
                         type: string
-                      createdBy:
+                      longDescription:
                         type: string
+                      price:
+                        type: number
+                      mrp:
+                        type: number
+                      inStock:
+                        type: boolean
+                      thumbnail:
+                        type: object
+                        properties:
+                          publicId:
+                            type: string
+                          secureUrl:
+                            type: string
+                      clothMaterial:
+                        type: string
+                      careMethod:
+                        type: string
+                      category:
+                        type: string
+                      user:
+                        type: string
+                      brand:
+                        type: string
+                      sizes:
+                        type: array
+                        items:
+                          type: string
+                      colors:
+                        type: array
+                        items:
+                          type: string
+                      stock:
+                        type: number
+                      images:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            publicId:
+                              type: string
+                            secureUrl:
+                              type: string
+                      rating:
+                        type: number
+                      numberOfReviews:
+                        type: number
                       __v:
                         type: string
                       createdAt:
@@ -3103,7 +3149,7 @@ paths:
                         type: string
                         format: date
         400:
-          description: Bad request, A brand must contain name and description
+          description: Bad request, A Product must contain name, shortDescription, longDescription, price, mrp, thumbnail, clothMaterial, careMethod, brand,stock, images and category
           content:
             application/json:
               schema:
@@ -3114,9 +3160,9 @@ paths:
                     example: fail
                   message:
                     type: string
-                    example: A brand must contain name and description
+                    example: A Product must contain name, shortDescription, longDescription, price, mrp, thumbnail, clothMaterial, careMethod, brand,stock, images and category
         401:
-          description: Unauthorized, Brand already exists
+          description: Unauthorized, Brand or Category does not exists
           content:
             application/json:
               schema:
@@ -3127,7 +3173,125 @@ paths:
                     example: fail
                   message:
                     type: string
-                    example: Brand already exists
+                    example: Unauthorized, Brand or Category does not exists
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /product/{id}:
+    patch:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can update the product based on id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Enter the product id
+          default: 61b9ab687b422cb615179c6d
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Enter the name of the product
+                shortDescription:
+                  type: string
+                  description: Enter the short description of the product
+                longDescription:
+                  type: string
+                  description: Enter the long description of the product
+                price:
+                  type: number
+                  description: Enter the price of the product
+                mrp:
+                  type: number
+                  description: Enter the mrp of the product
+                inStock:
+                  type: boolean
+                  description: True if product is available
+                clothMaterial:
+                  type: string
+                  description: Enter the cloth material of the product
+                careMethod:
+                  type: string
+                  description: Enter the care method of the product
+                sizes:
+                  type: array
+                  description: Enter the size's of available of the product
+                  items:
+                    type: string
+                colors:
+                  type: array
+                  description: Enter the color's of available of the product
+                  items:
+                    type: string
+                stock:
+                  type: number
+                  description: Enter the stock of the product
+      responses:
+        200:
+          description: success, Product updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  message:
+                    type: Product updated successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Bad request
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product not found
         500:
           description: Internal server error
           content:
