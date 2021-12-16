@@ -3431,6 +3431,339 @@ paths:
                   message:
                     type: string
                     example: error message
+    get:
+      tags:
+        - Product
+      summary: A logged in user can get list of all brands
+      responses:
+        200:
+          description: success, Brand list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  result:
+                    type: number
+                  brands:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        active:
+                          type: boolean
+                        createdBy:
+                          type: string
+                        __v:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date
+                        updatedAt:
+                          type: string
+                          format: date
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /product/brand/{id}:
+    get:
+      tags:
+        - Product
+      summary: A logged in user can get details of brand based on Id
+      parameters:
+        - name: id
+          required: true
+          description: Enter the brand id
+          in: path
+          default: 61b758ddb22c060aa9f97867
+      responses:
+        200:
+          description: success, Category details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  brand:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      active:
+                        type: boolean
+                      createdBy:
+                        type: string
+                      __v:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Brand your looking for not found, please try different id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Brand your looking for not found, please try different id
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+    patch:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can update the brand based on id
+      parameters:
+        - name: id
+          required: true
+          description: Enter the brand id
+          in: path
+          default: 61b758ddb22c060aa9f97867
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: Badjatya
+                  description: Enter the name of the brand
+                description:
+                  type: string
+                  default: Good brand
+                  description: Enter the description of the brand
+                active:
+                  type: boolean
+                  default: true
+                  description: is brand active
+      responses:
+        200:
+          description: success, Brand updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                    example: Brand updated successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Brand your looking for not found, please try different id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Brand your looking for not found, please try different id
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+    delete:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can delete the Brand based on id
+      parameters:
+        - name: id
+          required: true
+          description: Enter the Brand id
+          in: path
+          default: 61b758ddb22c060aa9f97867
+      responses:
+        200:
+          description: success, Brand deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                    example: Brand deleted successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Brand your looking for not found, please try different id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Brand your looking for not found, please try different id
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
 
   /product:
     post:

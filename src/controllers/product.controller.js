@@ -193,6 +193,110 @@ exports.addBrand = async (req, res) => {
   }
 };
 
+// Get ALl Brand
+exports.getAllBrand = async (req, res) => {
+  try {
+    // Getting all Brand
+    const brands = await Brand.find({});
+
+    res.status(200).json({
+      status: "success",
+      result: brands.length,
+      brands,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Get single Brand
+exports.getSingleBrand = async (req, res) => {
+  try {
+    // Getting single brand
+    const brand = await Brand.findById(req.params.id);
+
+    // If brand not found
+    if (!brand) {
+      return customError(
+        res,
+        404,
+        "Brand your looking for not found, please try different id"
+      );
+    }
+
+    // response
+    res.status(200).json({
+      status: "success",
+      brand,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Update Brand
+exports.updateBrand = async (req, res) => {
+  try {
+    // Getting single brand
+    const brand = await Brand.findById(req.params.id);
+
+    // If brand not found
+    if (!brand) {
+      return customError(
+        res,
+        404,
+        "Brand your looking for not found, please try different id"
+      );
+    }
+
+    // Updating brand
+    await Brand.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name || brand.name,
+        description: req.body.description || brand.description,
+        active: req.body.active || brand.active,
+        createdBy: req.user._id,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    res.status(200).json({
+      status: "success",
+      message: "Brand updated successfully",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Delete Brand
+exports.deleteBrand = async (req, res) => {
+  try {
+    // Deleting brand
+    const brand = await Brand.findByIdAndDelete(req.params.id);
+
+    // If brand not found
+    if (!brand) {
+      return customError(
+        res,
+        404,
+        "Brand your looking for not found, please try different id"
+      );
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Brand deleted successfully",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
 // Creating Product
 exports.addProduct = async (req, res) => {
   try {

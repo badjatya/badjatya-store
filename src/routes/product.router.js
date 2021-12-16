@@ -10,6 +10,8 @@ const {
   getSingleCategory,
   updateCategory,
   deleteCategory,
+  getAllBrand,
+  getSingleBrand,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -44,6 +46,7 @@ router
 // Brand routes
 router
   .route("/brand")
+  .get(isLoggedIn, getAllBrand)
   .post(isLoggedIn, customRole("admin", "manager", "productManager"), addBrand);
 
 // Product routes
