@@ -10,6 +10,7 @@ const cloudinary = require("cloudinary");
 
 // Utils
 const customError = require("../utils/customError");
+const productsQueryHandler = require("../utils/productsQueryHandler");
 
 // Creating category
 exports.addCategory = async (req, res) => {
@@ -303,6 +304,51 @@ exports.getSingleBrand = async (req, res) => {
   }
 };
 
+// Get all products by brand
+exports.getAllProductsByBrand = async (req, res) => {
+  try {
+    // Getting single brand
+    const brand = await Brand.findById(req.params.id);
+
+    // If brand not found
+    if (!brand) {
+      return customError(
+        res,
+        404,
+        "Brand your looking for not found, please try different id"
+      );
+    }
+
+    // getting all products of brand
+    const products = await Product.find({ brand: brand._id }).select([
+      "-longDescription",
+      "-clothMaterial",
+      "-careMethod",
+      "-category",
+      "-brand",
+      "-user",
+      "-sizes",
+      "-colors",
+      "-images",
+      "-rating",
+      "-numberOfReviews",
+      "-createdAt",
+      "-updatedAt",
+      "-__v",
+      "-stock",
+    ]);
+
+    // response
+    res.status(200).json({
+      status: "success",
+      result: products.length,
+      products,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
 // Update Brand
 exports.updateBrand = async (req, res) => {
   try {
@@ -528,6 +574,94 @@ exports.addProduct = async (req, res) => {
     res.status(201).json({
       status: "success",
       message: "Product created",
+      product,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Get all products
+exports.getAllProducts = async (req, res) => {
+  try {
+    let products = new productsQueryHandler(
+      Product.find().select([
+        "-longDescription",
+        "-clothMaterial",
+        "-careMethod",
+        "-category",
+        "-brand",
+        "-user",
+        "-sizes",
+        "-colors",
+        "-images",
+        "-rating",
+        "-numberOfReviews",
+        "-createdAt",
+        "-updatedAt",
+        "-__v",
+        "-stock",
+      ]),
+      req.query
+    )
+      .search()
+      .filter();
+    const totalProducts = await Product.countDocuments();
+    const totalProductPerPage = 6;
+
+    products.pager(totalProductPerPage);
+    products = await products.base;
+
+    // response
+    res.status(200).json({
+      status: "success",
+      result: products.length,
+      totalProducts,
+      products,
+    });
+
+    // const products = await Product.find({}).select([
+    //   "-longDescription",
+    //   "-clothMaterial",
+    //   "-careMethod",
+    //   "-category",
+    //   "-brand",
+    //   "-user",
+    //   "-sizes",
+    //   "-colors",
+    //   "-images",
+    //   "-rating",
+    //   "-numberOfReviews",
+    //   "-createdAt",
+    //   "-updatedAt",
+    //   "-__v",
+    //   "-stock",
+    // ]);
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Get single product
+exports.getSingleProduct = async (req, res) => {
+  try {
+    // Getting single product and populating images, category and brand
+    const product = await Product.findById(req.params.id)
+      .populate(["images.id", "category", "brand"])
+      .select("-user");
+
+    // If product not found
+    if (!product) {
+      return customError(
+        res,
+        404,
+        "Product your looking for not found, please try different id"
+      );
+    }
+
+    // response
+    res.status(200).json({
+      status: "success",
       product,
     });
   } catch (error) {

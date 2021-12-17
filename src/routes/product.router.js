@@ -11,9 +11,12 @@ const {
   deleteCategory,
   getAllBrand,
   getSingleBrand,
+  getAllProductsByBrand,
   updateBrand,
   deleteBrand,
   addProduct,
+  getAllProducts,
+  getSingleProduct,
   updateProduct,
 } = require("../controllers/product.controller");
 
@@ -72,9 +75,13 @@ router
     deleteBrand
   );
 
+// Getting all products based on brand id
+router.route("/brand/products/:id").get(isLoggedIn, getAllProductsByBrand);
+
 // Product routes
 router
   .route("/")
+  .get(isLoggedIn, getAllProducts)
   .post(
     isLoggedIn,
     customRole("admin", "manager", "productManager"),
@@ -83,6 +90,7 @@ router
 
 router
   .route("/:id")
+  .get(isLoggedIn, getSingleProduct)
   .patch(
     isLoggedIn,
     customRole("admin", "manager", "productManager"),
