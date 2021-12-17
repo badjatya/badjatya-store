@@ -4,14 +4,17 @@ const router = require("express").Router();
 const {
   addCategory,
   addBrand,
-  addProduct,
-  updateProduct,
   getAllCategory,
   getSingleCategory,
+  getAllProductsByCategory,
   updateCategory,
   deleteCategory,
   getAllBrand,
   getSingleBrand,
+  updateBrand,
+  deleteBrand,
+  addProduct,
+  updateProduct,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -29,6 +32,7 @@ router
     addCategory
   );
 
+// Getting, updating and deleting category based on id
 router
   .route("/category/:id")
   .get(isLoggedIn, getSingleCategory)
@@ -43,11 +47,30 @@ router
     deleteCategory
   );
 
+// Getting all products based on category id
+router
+  .route("/category/products/:id")
+  .get(isLoggedIn, getAllProductsByCategory);
+
 // Brand routes
 router
   .route("/brand")
   .get(isLoggedIn, getAllBrand)
   .post(isLoggedIn, customRole("admin", "manager", "productManager"), addBrand);
+
+router
+  .route("/brand/:id")
+  .get(isLoggedIn, getSingleBrand)
+  .patch(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    updateBrand
+  )
+  .delete(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    deleteBrand
+  );
 
 // Product routes
 router

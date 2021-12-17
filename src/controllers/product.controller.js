@@ -95,6 +95,53 @@ exports.getSingleCategory = async (req, res) => {
   }
 };
 
+// Get all products by category
+exports.getAllProductsByCategory = async (req, res) => {
+  try {
+    // Getting single category
+    const category = await Category.findById(req.params.id);
+
+    // If category not found
+    if (!category) {
+      return customError(
+        res,
+        404,
+        "Category your looking for not found, please try different id"
+      );
+    }
+
+    // getting all products of category
+    const products = await Product.find({ category: category._id }).select([
+      "-longDescription",
+      "-clothMaterial",
+      "-careMethod",
+      "-category",
+      "-brand",
+      "-user",
+      "-sizes",
+      "-colors",
+      "-images",
+      "-rating",
+      "-numberOfReviews",
+      "-createdAt",
+      "-updatedAt",
+      "-__v",
+      "-stock",
+    ]);
+
+    //
+
+    // response
+    res.status(200).json({
+      status: "success",
+      result: products.length,
+      products,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
 // Update Category
 exports.updateCategory = async (req, res) => {
   try {
@@ -137,8 +184,8 @@ exports.updateCategory = async (req, res) => {
 // Delete Category
 exports.deleteCategory = async (req, res) => {
   try {
-    // Deleting category
-    const category = await Category.findByIdAndDelete(req.params.id);
+    // Getting category
+    const category = await Category.findById(req.params.id);
 
     // If category not found
     if (!category) {
@@ -148,6 +195,28 @@ exports.deleteCategory = async (req, res) => {
         "Category your looking for not found, please try different id"
       );
     }
+
+    // Getting all products of Category
+    const products = await Product.find({ category: req.params.id });
+
+    // Mapping products to delete images, thumbnail and product
+    products.map(async (product) => {
+      // Deleting thumbnail
+      await cloudinary.v2.uploader.destroy(product.thumbnail.pubicId);
+
+      for (let index = 0; index < product.images.length; index++) {
+        const image = await Image.findById(product.images[index].id);
+
+        // Deleting images
+        await cloudinary.v2.uploader.destroy(image.publicId);
+        await image.remove();
+      }
+
+      await product.remove();
+    });
+
+    // deleting category
+    await category.remove();
 
     res.status(200).json({
       status: "success",
@@ -276,8 +345,8 @@ exports.updateBrand = async (req, res) => {
 // Delete Brand
 exports.deleteBrand = async (req, res) => {
   try {
-    // Deleting brand
-    const brand = await Brand.findByIdAndDelete(req.params.id);
+    // Getting brand
+    const brand = await Brand.findById(req.params.id);
 
     // If brand not found
     if (!brand) {
@@ -287,6 +356,28 @@ exports.deleteBrand = async (req, res) => {
         "Brand your looking for not found, please try different id"
       );
     }
+
+    // Getting all products of brands
+    const products = await Product.find({ brand: req.params.id });
+
+    // Mapping products to delete images, thumbnail and product
+    products.map(async (product) => {
+      // Deleting thumbnail
+      await cloudinary.v2.uploader.destroy(product.thumbnail.pubicId);
+
+      for (let index = 0; index < product.images.length; index++) {
+        const image = await Image.findById(product.images[index].id);
+
+        // Deleting images
+        await cloudinary.v2.uploader.destroy(image.publicId);
+        await image.remove();
+      }
+
+      await product.remove();
+    });
+
+    // deleting brand
+    await brand.remove();
 
     res.status(200).json({
       status: "success",

@@ -2880,11 +2880,11 @@ paths:
                     type: string
                     example: error message
 
-  # Product
+  # Product - Category
   /product/category:
     post:
       tags:
-        - Product
+        - Product - Category
       summary: An admin, manager or productManager can create a new category, required categoryName, categoryType and gender
       requestBody:
         content:
@@ -2996,7 +2996,7 @@ paths:
                     example: error message
     get:
       tags:
-        - Product
+        - Product - Category
       summary: A logged in user can get list of all categories
       responses:
         200:
@@ -3069,10 +3069,106 @@ paths:
                     type: string
                     example: error message
 
+  /product/category/products/{id}:
+    get:
+      tags:
+        - Product - Category
+      summary: A logged in user can get all products based on category Id
+      parameters:
+        - name: id
+          required: true
+          description: Enter the category id
+          in: path
+          default: 61b752aef305de70ea23ff86
+      responses:
+        200:
+          description: success, Category details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        shortDescription:
+                          type: string
+                        price:
+                          type: number
+                        mrp:
+                          type: number
+                        inStock:
+                          type: boolean
+                        thumbnail:
+                          type: object
+                          properties:
+                            publicId:
+                              type: string
+                            secureUrl:
+                              type: string
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Category your looking for not found, please try different id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Category your looking for not found, please try different id
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
   /product/category/{id}:
     get:
       tags:
-        - Product
+        - Product - Category
       summary: A logged in user can get details of category based on Id
       parameters:
         - name: id
@@ -3163,7 +3259,7 @@ paths:
                     example: error message
     patch:
       tags:
-        - Product
+        - Product - Category
       summary: An admin, manager or productManager can update the category based on id
       parameters:
         - name: id
@@ -3265,7 +3361,7 @@ paths:
                     example: error message
     delete:
       tags:
-        - Product
+        - Product - Category
       summary: An admin, manager or productManager can delete the category based on id
       parameters:
         - name: id
@@ -3337,10 +3433,11 @@ paths:
                     type: string
                     example: error message
 
+  # Product - Brand
   /product/brand:
     post:
       tags:
-        - Product
+        - Product - Brand
       summary: An admin, manager or productManager can create a new brand, required name and description
       requestBody:
         content:
@@ -3433,7 +3530,7 @@ paths:
                     example: error message
     get:
       tags:
-        - Product
+        - Product - Brand
       summary: A logged in user can get list of all brands
       responses:
         200:
@@ -3511,7 +3608,7 @@ paths:
   /product/brand/{id}:
     get:
       tags:
-        - Product
+        - Product - Brand
       summary: A logged in user can get details of brand based on Id
       parameters:
         - name: id
@@ -3602,7 +3699,7 @@ paths:
                     example: error message
     patch:
       tags:
-        - Product
+        - Product - Brand
       summary: An admin, manager or productManager can update the brand based on id
       parameters:
         - name: id
@@ -3693,7 +3790,7 @@ paths:
                     example: error message
     delete:
       tags:
-        - Product
+        - Product - Brand
       summary: An admin, manager or productManager can delete the Brand based on id
       parameters:
         - name: id
