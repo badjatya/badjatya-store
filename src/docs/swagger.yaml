@@ -4183,8 +4183,278 @@ paths:
                   message:
                     type: string
                     example: error message
+    get:
+      tags:
+        - Product
+      summary: A logged in user can access all the products, he can filter the products based on query and search also he can paginate
+      parameters:
+        - name: search
+          description: Enter product you want to search
+          in: query
+          schema:
+            type: string
+        - name: price
+          schema:
+            type: string
+          in: query
+          description: In frontend or postman u can use price[gt]=100 (gt,gte,lt,lte) here u can only price=500
+        - name: ratings
+          schema:
+            type: string
+          in: query
+          description: In frontend or postman u can use rating[gt]=3.0 (gt,gte,lt,lte) here u can only rating=4.0
+        - name: limit
+          schema:
+            type: string
+          in: query
+          description: user can limit the number of products shown in per page
+        - name: page
+          schema:
+            type: string
+          in: query
+          description: user can view different page
+      responses:
+        200:
+          description: success, list of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  result:
+                    type: number
+                  totalProducts:
+                    type: number
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        shortDescription:
+                          type: string
+                        price:
+                          type: number
+                        mrp:
+                          type: number
+                        inStock:
+                          type: boolean
+                        thumbnail:
+                          type: object
+                          properties:
+                            publicId:
+                              type: string
+                            secureUrl:
+                              type: string
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
 
   /product/{id}:
+    get:
+      tags:
+        - Product
+      summary: A logged in user can get details of product based on Id
+      parameters:
+        - name: id
+          required: true
+          description: Enter the product id
+          in: path
+          default: 61bc993a389bc4909b1b25f3
+      responses:
+        200:
+          description: success, Product details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  product:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      shortDescription:
+                        type: string
+                      longDescription:
+                        type: string
+                      price:
+                        type: number
+                      mrp:
+                        type: number
+                      inStock:
+                        type: boolean
+                      clothMaterial:
+                        type: string
+                      careMethod:
+                        type: string
+                      category:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          categoryName:
+                            type: string
+                          categoryType:
+                            type: string
+                          gender:
+                            type: string
+                          createdBy:
+                            type: string
+                          createdAt:
+                            type: string
+                            format: date
+                          updatedAt:
+                            type: string
+                            format: date
+                      brand:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          active:
+                            type: boolean
+                          createdBy:
+                            type: string
+                          createdAt:
+                            type: string
+                            format: date
+                          updatedAt:
+                            type: string
+                            format: date
+                      sizes:
+                        type: array
+                        items:
+                          type: string
+                      colors:
+                        type: array
+                        items:
+                          type: string
+                      stock:
+                        type: number
+                      images:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                publicId:
+                                  type: string
+                                secureUrl:
+                                  type: string
+                                __v:
+                                  type: string
+                      rating:
+                        type: number
+                      numberOfReviews:
+                        type: number
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Product your looking for not found, please try different id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product your looking for not found, please try different id
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
     patch:
       tags:
         - Product
