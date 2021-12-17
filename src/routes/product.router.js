@@ -17,7 +17,8 @@ const {
   addProduct,
   getAllProducts,
   getSingleProduct,
-  updateProduct,
+  updateSingleProductDetails,
+  updateSingleProductThumbnail,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -61,6 +62,7 @@ router
   .get(isLoggedIn, getAllBrand)
   .post(isLoggedIn, customRole("admin", "manager", "productManager"), addBrand);
 
+// Getting, updating and deleting brand based on id
 router
   .route("/brand/:id")
   .get(isLoggedIn, getSingleBrand)
@@ -88,13 +90,25 @@ router
     addProduct
   );
 
+// Getting single product
+router.route("/:id").get(isLoggedIn, getSingleProduct);
+
+// Updating single product details
 router
-  .route("/:id")
-  .get(isLoggedIn, getSingleProduct)
+  .route("/update/details/:id")
   .patch(
     isLoggedIn,
     customRole("admin", "manager", "productManager"),
-    updateProduct
+    updateSingleProductDetails
+  );
+
+// Updating single product thumbnail
+router
+  .route("/update/thumbnail/:id")
+  .patch(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    updateSingleProductThumbnail
   );
 
 module.exports = router;

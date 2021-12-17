@@ -669,8 +669,8 @@ exports.getSingleProduct = async (req, res) => {
   }
 };
 
-// Update Product
-exports.updateProduct = async (req, res) => {
+// Update Product details
+exports.updateSingleProductDetails = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -706,6 +706,54 @@ exports.updateProduct = async (req, res) => {
     res.json({
       status: "success",
       message: "Product updated successfully",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Update Product thumbnail
+exports.updateSingleProductThumbnail = async (req, res) => {
+  try {
+    // If thumbnail not found
+    if (!req.files) {
+      return customError(
+        res,
+        401,
+        "Product thumbnail updation, must contain new thumbnail"
+      );
+    }
+
+    // Getting product
+    const product = await Product.findById(req.params.id);
+
+    // If product not found
+    if (!product) {
+      return customError(res, 404, "Product not found");
+    }
+
+    // Deleting thumbnail from cloudinary
+    await cloudinary.v2.uploader.destroy(product.thumbnail.pubicId);
+
+    // Uploading new thumbnail to cloudinary
+    const result = await cloudinary.v2.uploader.upload(
+      req.files.thumbnail.tempFilePath,
+      {
+        folder: "badjatya-store/products",
+      }
+    );
+
+    // Saving thumbnail to DB
+    product.thumbnail = {
+      pubicId: result.public_id,
+      secureUrl: result.secure_url,
+    };
+    await product.save();
+
+    // Response
+    res.json({
+      status: "success",
+      message: "Product thumbnail updated successfully",
     });
   } catch (error) {
     customError(res, 500, error.message, "error");

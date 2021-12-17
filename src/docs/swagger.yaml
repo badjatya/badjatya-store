@@ -4455,10 +4455,12 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  /product/update/details/{id}:
     patch:
       tags:
         - Product
-      summary: An admin, manager or productManager can update the product based on id
+      summary: An admin, manager or productManager can update product details based on id
       parameters:
         - name: id
           in: path
@@ -4510,7 +4512,7 @@ paths:
                   description: Enter the stock of the product
       responses:
         200:
-          description: success, Product updated successfully
+          description: success, Product details updated successfully
           content:
             application/json:
               schema:
@@ -4519,7 +4521,7 @@ paths:
                   status:
                     type: success
                   message:
-                    type: Product updated successfully
+                    type: Product details updated successfully
         400:
           description: Bad request
           content:
@@ -4545,6 +4547,95 @@ paths:
                     example: fail
                   message:
                     type: string
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /product/update/thumbnail/{id}:
+    patch:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can update the product thumbnail based on id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Enter the product id
+          default: 61bc993a389bc4909b1b25f3
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - thumbnail
+              properties:
+                thumbnail:
+                  type: file
+                  format: binary
+                  in: formData
+                  description: Enter the thumbnail of the product
+      responses:
+        200:
+          description: success, Product thumbnail updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  message:
+                    type: Product thumbnail updated successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Bad request
+        401:
+          description: Unauthorized, Product thumbnail updation, must contain new thumbnail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product thumbnail updation, must contain new thumbnail
         404:
           description: Product not found
           content:
