@@ -434,6 +434,8 @@ exports.deleteBrand = async (req, res) => {
   }
 };
 
+// ** Product
+
 // Creating Product
 exports.addProduct = async (req, res) => {
   try {
@@ -840,6 +842,98 @@ exports.updateSingleProductImages = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Update Product category
+exports.updateSingleProductCategory = async (req, res) => {
+  try {
+    const { categoryName, categoryType, gender } = req.body;
+
+    // Checking all the fields
+    if (!categoryName || !categoryType || !gender) {
+      return customError(
+        res,
+        400,
+        "A Product category updation must contain categoryName, categoryType and gender"
+      );
+    }
+
+    // Getting product
+    const product = await Product.findById(req.params.id);
+
+    // If product not found
+    if (!product) {
+      return customError(res, 404, "Product not found");
+    }
+
+    // Checking is category exist
+    const category = await Category.findOne({
+      categoryName: categoryName.toLowerCase(),
+      categoryType,
+      gender,
+    });
+    // If category is not present in DB
+    if (!category) {
+      return customError(res, 401, "Category does not exists");
+    }
+
+    // saving category id
+    product.category = category._id;
+
+    // Updating product
+    await product.save();
+
+    // Response
+    res.status(200).json({
+      status: "success",
+      message: "Product category updated",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Update Product brand
+exports.updateSingleProductBrand = async (req, res) => {
+  try {
+    // Checking all the fields
+    if (!req.body.brand) {
+      return customError(
+        res,
+        400,
+        "A Product brand updation must contain brand name"
+      );
+    }
+
+    // Getting product
+    const product = await Product.findById(req.params.id);
+
+    // If product not found
+    if (!product) {
+      return customError(res, 404, "Product not found");
+    }
+
+    // Checking is brand exist
+    const brand = await Brand.findOne({ name: req.body.brand });
+    // If brand is not present in DB
+    if (!brand) {
+      return customError(res, 401, "brand does not exists");
+    }
+
+    // saving brand id
+    product.brand = brand._id;
+
+    // Updating product
+    await product.save();
+
+    // Response
+    res.status(200).json({
+      status: "success",
+      message: "Product brand updated",
+    });
+  } catch (error) {
     customError(res, 500, error.message, "error");
   }
 };

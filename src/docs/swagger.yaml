@@ -3958,6 +3958,8 @@ paths:
                     type: string
                     example: error message
 
+  # ** Product
+
   /product:
     post:
       tags:
@@ -4636,6 +4638,298 @@ paths:
                   message:
                     type: string
                     example: Product thumbnail updation, must contain new thumbnail
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /product/update/images/{id}:
+    patch:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can update the product images based on id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Enter the product id
+          default: 61bc993a389bc4909b1b25f3
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - images
+              properties:
+                images:
+                  type: array
+                  description: The upload product images
+                  items:
+                    in: formData
+                    type: file
+                    format: binary
+      responses:
+        200:
+          description: success, Product images updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  message:
+                    type: Product images updated successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Bad request
+        401:
+          description: Unauthorized, Product images updation, must contain new images
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product images updation, must contain new images
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /product/update/category/{id}:
+    patch:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can update the product category based on id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Enter the product id
+          default: 61bc993a389bc4909b1b25f3
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - categoryName
+                - categoryType
+                - gender
+              properties:
+                categoryName:
+                  type: string
+                  default: Shirt
+                  description: Enter the name of the category for the product
+                  required: true
+                categoryType:
+                  type: string
+                  default: top wear
+                  description: Enter the type of the category for the product
+                  required: true
+                  enum:
+                    - top wear
+                    - bottom wear
+                    - accessories
+                    - ethnic fusion wear
+                    - regional wear
+                gender:
+                  type: string
+                  default: Women
+                  description: Enter the gender
+                  required: true
+                  enum:
+                    - Men
+                    - Women
+                    - Boy
+                    - Girl
+      responses:
+        200:
+          description: success, Product category updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  message:
+                    type: Product category updated successfully
+        400:
+          description: Bad request, A Product category updation must contain categoryName, categoryType and gender
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: A Product category updation must contain categoryName, categoryType and gender
+        401:
+          description: Unauthorized, Category does not exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Category does not exists
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  /product/update/brand/{id}:
+    patch:
+      tags:
+        - Product
+      summary: An admin, manager or productManager can update the product brand based on id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Enter the product id
+          default: 61bc993a389bc4909b1b25f3
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - brand
+              properties:
+                brand:
+                  type: string
+                  default: Badjatya
+                  description: Enter the brand of the product
+                  required: true
+      responses:
+        200:
+          description: success, Product brand updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  message:
+                    type: Product brand updated successfully
+        400:
+          description: Bad request, "A Product brand updation must contain name of brand
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: A Product brand updation must contain name of brand
+        401:
+          description: Unauthorized, Brand does not exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Brand does not exists
         404:
           description: Product not found
           content:

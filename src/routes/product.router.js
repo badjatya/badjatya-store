@@ -20,6 +20,8 @@ const {
   updateSingleProductDetails,
   updateSingleProductThumbnail,
   updateSingleProductImages,
+  updateSingleProductCategory,
+  updateSingleProductBrand,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -119,6 +121,24 @@ router
     isLoggedIn,
     customRole("admin", "manager", "productManager"),
     updateSingleProductImages
+  );
+
+// Updating single product category
+router
+  .route("/update/category/:id")
+  .patch(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    updateSingleProductCategory
+  );
+
+// Updating single product brand
+router
+  .route("/update/brand/:id")
+  .patch(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    updateSingleProductBrand
   );
 
 module.exports = router;
