@@ -4,6 +4,7 @@ const Product = require("../models/product");
 const Image = require("../models/image");
 const Brand = require("../models/brand");
 const Category = require("../models/category");
+const Review = require("../models/review");
 
 // Lib
 const cloudinary = require("cloudinary");
@@ -649,7 +650,7 @@ exports.getSingleProduct = async (req, res) => {
   try {
     // Getting single product and populating images, category and brand
     const product = await Product.findById(req.params.id)
-      .populate(["images.id", "category", "brand"])
+      .populate(["images.id", "category", "brand", "reviews.id"])
       .select("-user");
 
     // If product not found
@@ -934,6 +935,82 @@ exports.updateSingleProductBrand = async (req, res) => {
       message: "Product brand updated",
     });
   } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Create review
+exports.createProductReview = async (req, res) => {
+  try {
+    // Getting body
+    const { star, comment } = req.body;
+    if (!star || !comment) {
+      return customError(res, 400, "Review must contain star and comment");
+    }
+
+    // Getting single product
+    const product = await Product.findById(req.params.id);
+
+    // If product not found
+    if (!product) {
+      return customError(
+        res,
+        404,
+        "Product your looking for not found, please try different id"
+      );
+    }
+
+    // Checking is user already created a review on this product
+    const reviewExist = await Review.findOne({
+      user: req.user._id,
+      product: product._id,
+    });
+
+    // if Review exist update the previous review else create new review
+    if (reviewExist) {
+      reviewExist.star = star;
+      reviewExist.comment = comment;
+
+      // Saving to db
+      await reviewExist.save();
+    } else {
+      // Creating new review
+      const review = await Review.create({
+        user: req.user._id,
+        name: req.user.name,
+        product: product._id,
+        star,
+        comment,
+      });
+
+      // Saving to product
+      product.reviews = product.reviews.push({ id: review._id });
+    }
+
+    // Getting all reviews of this product
+    const allReviewsOfThisProduct = await Review.find({ product: product._id });
+
+    // Calculating rating
+    let totalRating = 0;
+    allReviewsOfThisProduct.forEach(
+      (review) => (totalRating = totalRating + review.star)
+    );
+    const totalReviews = allReviewsOfThisProduct.length;
+
+    // Updating product
+    product.numberOfReviews = totalReviews;
+    product.rating = (totalRating / totalReviews).toFixed(2);
+
+    // Saving to DB
+    await product.save({ validateBeforeSave: false });
+
+    // response
+    res.status(200).json({
+      status: "success",
+      message: "Review created",
+    });
+  } catch (error) {
+    console.log(error);
     customError(res, 500, error.message, "error");
   }
 };

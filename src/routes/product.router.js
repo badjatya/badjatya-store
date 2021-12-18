@@ -22,6 +22,7 @@ const {
   updateSingleProductImages,
   updateSingleProductCategory,
   updateSingleProductBrand,
+  createProductReview,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -140,5 +141,8 @@ router
     customRole("admin", "manager", "productManager"),
     updateSingleProductBrand
   );
+
+// Creating review or updating
+router.route("/review/:id").post(isLoggedIn, createProductReview);
 
 module.exports = router;

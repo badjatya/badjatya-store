@@ -125,6 +125,14 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    reviews: [
+      {
+        id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Review",
+        },
+      },
+    ],
   },
   {
     timestamps: true,
