@@ -19,6 +19,7 @@ const {
   getSingleProduct,
   updateSingleProductDetails,
   updateSingleProductThumbnail,
+  updateSingleProductImages,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -109,6 +110,15 @@ router
     isLoggedIn,
     customRole("admin", "manager", "productManager"),
     updateSingleProductThumbnail
+  );
+
+// Updating single product images
+router
+  .route("/update/images/:id")
+  .patch(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    updateSingleProductImages
   );
 
 module.exports = router;

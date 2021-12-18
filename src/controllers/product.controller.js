@@ -759,3 +759,87 @@ exports.updateSingleProductThumbnail = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Update Product images
+exports.updateSingleProductImages = async (req, res) => {
+  try {
+    // If images not found
+    if (!req.files) {
+      return customError(
+        res,
+        401,
+        "Product Images updation, must contain new images"
+      );
+    }
+
+    // Getting product
+    const product = await Product.findById(req.params.id);
+
+    // If product not found
+    if (!product) {
+      return customError(res, 404, "Product not found");
+    }
+
+    // Deleting images from cloudinary and delete Image  from db
+    for (let index = 0; index < product.images.length; index++) {
+      const image = await Image.findById(product.images[index].id);
+      // Deleting images
+      await cloudinary.v2.uploader.destroy(image.publicId);
+      await image.remove();
+    }
+
+    // Uploading new images to cloudinary and saving to db
+    let imageArray = [];
+    // Uploading image based on single image or multiple image
+    if (req.files.images.length !== undefined) {
+      for (let index = 0; index < req.files.images.length; index++) {
+        let result = await cloudinary.v2.uploader.upload(
+          req.files.images[index].tempFilePath,
+          {
+            folder: "badjatya-store/products",
+          }
+        );
+
+        imageArray.push({
+          id: result.public_id,
+          secureUrl: result.secure_url,
+        });
+      }
+    } else {
+      let result = await cloudinary.v2.uploader.upload(
+        req.files.images.tempFilePath,
+        {
+          folder: "badjatya-store/products",
+        }
+      );
+
+      imageArray.push({
+        id: result.public_id,
+        secureUrl: result.secure_url,
+      });
+    }
+
+    // Saving Image model's id to Product db
+    let images = [];
+    for (let index = 0; index < imageArray.length; index++) {
+      const image = await Image.create({
+        publicId: imageArray[index].id,
+        secureUrl: imageArray[index].secureUrl,
+      });
+      images.push({ id: image._id });
+    }
+
+    // Saving to product db
+    product.images = images;
+    await product.save();
+
+    // Response
+    res.json({
+      status: "success",
+      message: "Product images updated successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    customError(res, 500, error.message, "error");
+  }
+};
