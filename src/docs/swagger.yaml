@@ -5147,3 +5147,76 @@ paths:
                   message:
                     type: string
                     example: error message
+    delete:
+      tags:
+        - Product
+      summary: An logged in user can get delete the review of a particular product that he created based on product id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Enter the product id
+          default: 61bc993a389bc4909b1b25f3
+      responses:
+        200:
+          description: success, Product deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  message:
+                    type: string
+                    example: Product deleted successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
