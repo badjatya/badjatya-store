@@ -104,7 +104,6 @@ exports.createUser = async (req, res) => {
 
         // Checking is valid refer
         const referUser = await User.findOne({ referBy });
-        console.log(referUser);
 
         if (referUser) {
           balance = 50;
