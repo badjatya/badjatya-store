@@ -25,6 +25,7 @@ const {
   createProductReview,
   getAllProductReviews,
   userDeleteProductReview,
+  deleteProduct,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -97,7 +98,14 @@ router
   );
 
 // Getting single product
-router.route("/:id").get(isLoggedIn, getSingleProduct);
+router
+  .route("/:id")
+  .get(isLoggedIn, getSingleProduct)
+  .delete(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    deleteProduct
+  );
 
 // Updating single product details
 router

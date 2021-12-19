@@ -201,7 +201,7 @@ exports.deleteCategory = async (req, res) => {
     // Getting all products of Category
     const products = await Product.find({ category: req.params.id });
 
-    // Mapping products to delete images, thumbnail and product
+    // Mapping products to delete images, thumbnail, reviews and product
     products.map(async (product) => {
       // Deleting thumbnail
       await cloudinary.v2.uploader.destroy(product.thumbnail.pubicId);
@@ -213,6 +213,14 @@ exports.deleteCategory = async (req, res) => {
         await cloudinary.v2.uploader.destroy(image.publicId);
         await image.remove();
       }
+
+      // Removing reviews
+      const allReviewsOfThisProduct = await Review.find({
+        product: product._id,
+      });
+      allReviewsOfThisProduct.map(async (review) => {
+        await Review.findByIdAndDelete(review._id);
+      });
 
       await product.remove();
     });
@@ -407,7 +415,7 @@ exports.deleteBrand = async (req, res) => {
     // Getting all products of brands
     const products = await Product.find({ brand: req.params.id });
 
-    // Mapping products to delete images, thumbnail and product
+    // Mapping products to delete images, thumbnail, reviews and product
     products.map(async (product) => {
       // Deleting thumbnail
       await cloudinary.v2.uploader.destroy(product.thumbnail.pubicId);
@@ -419,6 +427,14 @@ exports.deleteBrand = async (req, res) => {
         await cloudinary.v2.uploader.destroy(image.publicId);
         await image.remove();
       }
+
+      // Removing reviews
+      const allReviewsOfThisProduct = await Review.find({
+        product: product._id,
+      });
+      allReviewsOfThisProduct.map(async (review) => {
+        await Review.findByIdAndDelete(review._id);
+      });
 
       await product.remove();
     });
@@ -1096,6 +1112,52 @@ exports.userDeleteProductReview = async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "Review deleted successfully",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Deleting Product
+exports.deleteProduct = async (req, res) => {
+  try {
+    // Getting all products of brands
+    const product = await Product.findById(req.params.id);
+
+    // If product not found
+    if (!product) {
+      return customError(
+        res,
+        404,
+        "Product your looking for not found, please try different id"
+      );
+    }
+
+    // Deleting thumbnail
+    await cloudinary.v2.uploader.destroy(product.thumbnail.pubicId);
+
+    // Removing product image
+    for (let index = 0; index < product.images.length; index++) {
+      const image = await Image.findById(product.images[index].id);
+
+      // Deleting images
+      await cloudinary.v2.uploader.destroy(image.publicId);
+      await image.remove();
+    }
+
+    // Removing reviews
+    const allReviewsOfThisProduct = await Review.find({ product: product._id });
+    allReviewsOfThisProduct.map(async (review) => {
+      await Review.findByIdAndDelete(review._id);
+    });
+
+    // Removing product
+    await product.remove();
+
+    // Response
+    res.status(200).json({
+      status: "success",
+      message: "Product deleted successfully",
     });
   } catch (error) {
     customError(res, 500, error.message, "error");
