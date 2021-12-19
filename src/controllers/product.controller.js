@@ -1077,6 +1077,7 @@ exports.userDeleteProductReview = async (req, res) => {
 
     // Finding all reviews on product
     const allReviewsOfThisProduct = await Review.find({ product: product._id });
+
     // Calculating rating
     let totalRating = 0;
     allReviewsOfThisProduct.forEach(
