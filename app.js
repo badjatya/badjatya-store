@@ -6,7 +6,7 @@ const app = express();
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
 const fileUpload = require("express-fileupload");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 
@@ -24,9 +24,9 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
-if (process.env.ENVIRONMENT === "development") {
-  app.use(morgan("dev"));
-}
+// if (process.env.ENVIRONMENT === "development") {
+//   app.use(morgan("dev"));
+// }
 
 // Passport - Social logins
 const GoogleStrategy = require("./src/passport/google");
