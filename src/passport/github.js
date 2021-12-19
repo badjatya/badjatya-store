@@ -10,7 +10,8 @@ passport.use(
     {
       clientID: process.env.GITHUB_AUTH_CLIENT_ID,
       clientSecret: process.env.GITHUB_AUTH_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/api/v1/users/github/callback",
+      callbackURL:
+        "https://badjatya-store.herokuapp.com/api/v1/users/github/callback",
     },
     function (accessToken, refreshToken, profile, next) {
       User.findOne({ socialLoginId: profile.id }).then((user) => {
