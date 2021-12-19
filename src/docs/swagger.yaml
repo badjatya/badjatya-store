@@ -4956,3 +4956,194 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  # * Review
+  /product/review/{id}:
+    post:
+      tags:
+        - Product
+      summary: An logged in user can post a review
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Enter the product id
+          default: 61bc993a389bc4909b1b25f3
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - star
+                - comment
+              properties:
+                star:
+                  type: number
+                  default: 4
+                  min: 1
+                  max: 5
+                  description: Enter the star for the product review
+                  required: true
+                comment:
+                  type: string
+                  default: A good product
+                  description: Enter the comment for the product review
+                  required: true
+      responses:
+        200:
+          description: success, Review created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  message:
+                    type: Review Created
+        400:
+          description: Bad request, Review must contain star and comment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Review must contain star and comment
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+    get:
+      tags:
+        - Product
+      summary: An logged in user can get list of all reviews of a particular product based on product id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Enter the product id
+          default: 61bc993a389bc4909b1b25f3
+      responses:
+        200:
+          description: success, List of reviews
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  reviews:
+                    type: array
+                    items:
+                      id:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          user:
+                            type: string
+                          product:
+                            type: string
+                          name:
+                            type: string
+                          star:
+                            type: number
+                          comment:
+                            type: string
+                          createdAt:
+                            type: string
+                          updatedAt:
+                            type: string
+                      _id:
+                        type: string
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Product not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message

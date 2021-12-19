@@ -1014,3 +1014,30 @@ exports.createProductReview = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// get all product reviews of a product
+exports.getAllProductReviews = async (req, res) => {
+  try {
+    // Getting single product
+    const product = await Product.findById(req.params.id).populate(
+      "reviews.id"
+    );
+
+    // If product not found
+    if (!product) {
+      return customError(
+        res,
+        404,
+        "Product your looking for not found, please try different id"
+      );
+    }
+
+    // response
+    res.status(200).json({
+      status: "success",
+      reviews: product.reviews,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};

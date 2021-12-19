@@ -23,6 +23,7 @@ const {
   updateSingleProductCategory,
   updateSingleProductBrand,
   createProductReview,
+  getAllProductReviews,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -142,7 +143,10 @@ router
     updateSingleProductBrand
   );
 
-// Creating review or updating
-router.route("/review/:id").post(isLoggedIn, createProductReview);
+// Review
+router
+  .route("/review/:id")
+  .post(isLoggedIn, createProductReview)
+  .get(isLoggedIn, getAllProductReviews);
 
 module.exports = router;
