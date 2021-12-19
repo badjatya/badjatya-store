@@ -25,6 +25,7 @@ const {
   createProductReview,
   getAllProductReviews,
   userDeleteProductReview,
+  deleteProductReview,
   deleteProduct,
 } = require("../controllers/product.controller");
 
@@ -158,5 +159,14 @@ router
   .post(isLoggedIn, createProductReview)
   .get(isLoggedIn, getAllProductReviews)
   .delete(isLoggedIn, userDeleteProductReview);
+
+// Admin, manager or productManager can remove a review of a product
+router
+  .route("/review")
+  .delete(
+    isLoggedIn,
+    customRole("admin", "manager", "productManager"),
+    deleteProductReview
+  );
 
 module.exports = router;

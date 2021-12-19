@@ -1118,6 +1118,75 @@ exports.userDeleteProductReview = async (req, res) => {
   }
 };
 
+// Delete review by admin, manager or product Manager
+exports.deleteProductReview = async (req, res) => {
+  // Getting Details
+  const { productId, reviewId } = req.body;
+
+  // If fields are missing
+  if (!productId || !reviewId) {
+    return customError(
+      res,
+      400,
+      "For removing review, productId and reviewId are required"
+    );
+  }
+
+  try {
+    // Getting single product
+    const product = await Product.findById(productId);
+
+    // If product not found
+    if (!product) {
+      return customError(
+        res,
+        404,
+        "Product your looking for not found, please try different id"
+      );
+    }
+
+    // Finding the review
+    const review = await Review.findById(reviewId);
+
+    // If review not found
+    if (!review) {
+      return customError(res, 400, "Review not found");
+    }
+
+    // Deleting review in product DB
+    product.reviews = product.reviews.filter(
+      (r) => r.id.toString() !== review._id.toString()
+    );
+    // Deleting Review in DB
+    await review.remove();
+
+    // Finding all reviews on product
+    const allReviewsOfThisProduct = await Review.find({ product: product._id });
+
+    // Calculating rating
+    let totalRating = 0;
+    allReviewsOfThisProduct.forEach(
+      (review) => (totalRating = totalRating + review.star)
+    );
+    const totalReviews = allReviewsOfThisProduct.length;
+
+    // Updating product
+    product.numberOfReviews = totalReviews;
+    product.rating = (totalRating / totalReviews).toFixed(2);
+
+    // Saving to DB
+    await product.save({ validateBeforeSave: false });
+
+    // response
+    res.status(200).json({
+      status: "success",
+      message: "Review deleted successfully",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
 // Deleting Product
 exports.deleteProduct = async (req, res) => {
   try {
