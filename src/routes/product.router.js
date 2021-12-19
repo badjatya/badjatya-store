@@ -24,6 +24,7 @@ const {
   updateSingleProductBrand,
   createProductReview,
   getAllProductReviews,
+  userDeleteProductReview,
 } = require("../controllers/product.controller");
 
 // User middleware
@@ -147,6 +148,7 @@ router
 router
   .route("/review/:id")
   .post(isLoggedIn, createProductReview)
-  .get(isLoggedIn, getAllProductReviews);
+  .get(isLoggedIn, getAllProductReviews)
+  .delete(isLoggedIn, userDeleteProductReview);
 
 module.exports = router;
