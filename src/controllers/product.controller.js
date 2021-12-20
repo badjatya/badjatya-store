@@ -1,5 +1,4 @@
 // Model
-const User = require("../models/user");
 const Product = require("../models/product");
 const Image = require("../models/image");
 const Brand = require("../models/brand");
