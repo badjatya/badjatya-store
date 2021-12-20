@@ -1,6 +1,6 @@
 // Model
 const Product = require("../models/product");
-const Image = require("../models/image");
+const Image = require("../models/Image");
 const Brand = require("../models/brand");
 const Category = require("../models/category");
 const Review = require("../models/review");
