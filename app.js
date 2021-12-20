@@ -1,5 +1,5 @@
+require("dotenv").config({ path: "./src/config/.env" });
 const express = require("express");
-require("dotenv").config({ path: "./src/config/config.env" });
 const app = express();
 
 // Library
