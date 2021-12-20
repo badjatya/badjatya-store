@@ -26,7 +26,7 @@ app.use(
 
 // Passport - Social logins
 const GoogleStrategy = require("./src/passport/google");
-const FacebookStrategy = require("./src/passport/facebook");
+// const FacebookStrategy = require("./src/passport/facebook");
 const GitHubStrategy = require("./src/passport/github");
 app.use(passport.initialize());
 
