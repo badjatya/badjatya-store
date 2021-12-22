@@ -10,6 +10,11 @@ const shippingSchema = mongoose.Schema(
         "An order schema must contain shippingInfo's phoneNumber",
       ],
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "An order must contain user"],
+      ref: "User",
+    },
     alternatePhoneNumber: Number,
     addressLineOne: {
       type: String,

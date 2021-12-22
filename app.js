@@ -41,7 +41,7 @@ app.use("/api/v1/admin", require("./src/routes/admin.router"));
 app.use("/api/v1/manager", require("./src/routes/manager.router"));
 app.use("/api/v1/userManager", require("./src/routes/userManager.router"));
 app.use("/api/v1/product", require("./src/routes/product.router"));
-app.use("/api/v1/order", require("./src/routes/order.router"));
+app.use("/api/v1/order", require("./src/routes/order/order.router"));
 
 // Exporting app
 module.exports = app;

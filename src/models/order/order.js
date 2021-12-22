@@ -38,7 +38,8 @@ const orderSchema = mongoose.Schema(
     orderStatus: {
       status: {
         type: String,
-        default: "Order Created",
+        lowercase: true,
+        default: "order created",
         required: [true, "An order schema must contain orderStatus's status"],
         enum: {
           values: [

@@ -11,6 +11,11 @@ const paymentSchema = mongoose.Schema(
       type: String,
       required: [true, "An order must contain paymentInfo's successId"],
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "An Payment must contain user"],
+      ref: "User",
+    },
   },
   {
     timestamps: true,
