@@ -35,6 +35,10 @@ const orderSchema = mongoose.Schema(
       type: Number,
       required: [true, "An order must contain shippingAmount"],
     },
+    totalAmount: {
+      type: Number,
+      required: [true, "An order must contain totalAmount"],
+    },
     orderStatus: {
       status: {
         type: String,

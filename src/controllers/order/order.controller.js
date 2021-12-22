@@ -20,8 +20,14 @@ const customError = require("../../utils/customError");
 exports.createOrder = async (req, res) => {
   try {
     // Destructuring order
-    const { shippingInfo, paymentInfo, orderItems, taxAmount, shippingAmount } =
-      req.body;
+    const {
+      shippingInfo,
+      paymentInfo,
+      orderItems,
+      taxAmount,
+      shippingAmount,
+      totalAmount,
+    } = req.body;
 
     // Checking all the fields
     if (
@@ -29,12 +35,13 @@ exports.createOrder = async (req, res) => {
       !paymentInfo ||
       !orderItems ||
       !taxAmount ||
-      !shippingAmount
+      !shippingAmount ||
+      !totalAmount
     ) {
       return customError(
         res,
         400,
-        "An Order must contain shippingInfo, paymentInfo, orderItems, taxAmount and shippingAmount."
+        "An Order must contain shippingInfo, paymentInfo, orderItems, taxAmount, totalAmount and shippingAmount."
       );
     }
 
@@ -160,6 +167,7 @@ exports.createOrder = async (req, res) => {
       paymentInfo: payment._id,
       orderItems: orders,
       taxAmount,
+      totalAmount,
       shippingAmount,
     });
 
