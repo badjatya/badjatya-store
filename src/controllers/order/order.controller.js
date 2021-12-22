@@ -180,3 +180,55 @@ exports.createOrder = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// User getting all orders
+exports.userGettingAllOrders = async (req, res) => {
+  try {
+    // Getting all orders created by user
+    const orders = await Order.find({ user: req.user._id })
+      .sort("-createdAt")
+      .select([
+        "-shippingInfo",
+        "-user",
+        "-paymentInfo",
+        "-taxAmount",
+        "-shippingAmount",
+        "-updatedAt",
+        "-__v",
+      ])
+      .populate("orderItems.id", [
+        "productName",
+        "price",
+        "quantity",
+        "thumbnail",
+      ]);
+
+    // Response
+    res.json({
+      status: "success",
+      result: orders.length,
+      orders,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// User getting details pf single orders
+exports.userGettingDetailsOfSingleOrder = async (req, res) => {
+  try {
+    // Getting single order created by user
+    const order = await Order.findOne({
+      _id: req.params.id,
+      user: req.user._id,
+    }).populate(["orderItems.id", "shippingInfo", "paymentInfo"]);
+
+    // Response
+    res.json({
+      status: "success",
+      order,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
