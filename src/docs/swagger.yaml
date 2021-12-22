@@ -13,6 +13,7 @@ info:
 servers:
   - url: "{Protocol}://localhost:{Port}/api/{Version}"
     description: Local version of the API
+  - url: "https://badjatya-store.herokuapp.com/api/{version}"
     variables:
       Protocol:
         enum:
