@@ -370,3 +370,48 @@ exports.updateSingleOrder = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Admin, manager or orderManager can delete single order
+exports.deleteSingleOrder = async (req, res) => {
+  try {
+    // Getting single order
+    const order = await Order.findById(req.params.id);
+
+    // If order not found
+    if (!order) {
+      return customError(res, 404, "Order not found");
+    }
+
+    // Removing shippingInfo and payment
+    await Shipping.findByIdAndDelete(order.shippingInfo);
+    await Payment.findByIdAndDelete(order.paymentInfo);
+
+    // Removing OrderItems
+    const orderItems = order.orderItems;
+    for (let index = 0; index < orderItems.length; index++) {
+      const orderItem = await OrderItem.findById(orderItems[index].id);
+      const product = await Product.findById(orderItem.product);
+
+      // Updating the product quantity
+      product.stock = product.stock + orderItem.quantity;
+      product.inStock = true;
+
+      // Saving Product
+      await product.save();
+
+      // Removing orderItem
+      await orderItem.remove();
+    }
+
+    // Removing order
+    await order.remove();
+
+    // Response
+    res.json({
+      status: "success",
+      message: "Order Deleted successfully",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};

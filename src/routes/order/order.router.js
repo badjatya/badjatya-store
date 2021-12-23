@@ -9,6 +9,7 @@ const {
   getAllOrders,
   getDetailsOfSingleOrder,
   updateSingleOrder,
+  deleteSingleOrder,
 } = require("../../controllers/order/order.controller");
 
 // User middleware
@@ -51,6 +52,11 @@ router
     isLoggedIn,
     customRole("admin", "manager", "orderManager"),
     updateSingleOrder
+  )
+  .delete(
+    isLoggedIn,
+    customRole("admin", "manager", "orderManager"),
+    deleteSingleOrder
   );
 
 module.exports = router;
