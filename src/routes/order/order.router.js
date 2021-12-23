@@ -6,12 +6,14 @@ const {
   userGettingAllOrders,
   userGettingDetailsOfSingleOrder,
   userTrackingSingleOrder,
+  getAllOrders,
+  getDetailsOfSingleOrder,
 } = require("../../controllers/order/order.controller");
 
 // User middleware
 const { isLoggedIn, customRole } = require("../../middlewares/user");
 
-// * Routes
+// * User
 
 // Creating Order
 router.route("/").post(isLoggedIn, createOrder);
@@ -24,5 +26,25 @@ router.route("/myOrders/:id").get(isLoggedIn, userGettingDetailsOfSingleOrder);
 
 // Tracking single order
 router.route("/myOrders/track/:id").get(isLoggedIn, userTrackingSingleOrder);
+
+// ** Admin, manager or orderManager
+
+// Getting all orders Order
+router
+  .route("/")
+  .get(
+    isLoggedIn,
+    customRole("admin", "manager", "orderManager"),
+    getAllOrders
+  );
+
+// Getting single Orderdetails
+router
+  .route("/:id")
+  .get(
+    isLoggedIn,
+    customRole("admin", "manager", "orderManager"),
+    getDetailsOfSingleOrder
+  );
 
 module.exports = router;

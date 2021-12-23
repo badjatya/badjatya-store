@@ -16,6 +16,8 @@ const cloudinary = require("cloudinary");
 // Utils
 const customError = require("../../utils/customError");
 
+// ** User
+
 // Creating Order
 exports.createOrder = async (req, res) => {
   try {
@@ -246,6 +248,67 @@ exports.userTrackingSingleOrder = async (req, res) => {
       _id: req.params.id,
       user: req.user._id,
     }).select(["orderStatus", "_id"]);
+
+    // If order not found
+    if (!order) {
+      return customError(res, 404, "Order not found");
+    }
+
+    // Response
+    res.json({
+      status: "success",
+      order,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// ** Admin, manager or orderManager
+
+// Admin, manager or orderManager can get all orders
+exports.getAllOrders = async (req, res) => {
+  try {
+    // Getting all orders created by user
+    const orders = await Order.find({})
+      .sort("-createdAt")
+      .select([
+        "-shippingInfo",
+        "-user",
+        "-paymentInfo",
+        "-taxAmount",
+        "-shippingAmount",
+        "-updatedAt",
+        "-__v",
+      ])
+      .populate("orderItems.id", [
+        "productName",
+        "price",
+        "quantity",
+        "thumbnail",
+      ]);
+
+    // Response
+    res.json({
+      status: "success",
+      result: orders.length,
+      orders,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// Admin, manager or orderManager can get details of single order
+exports.getDetailsOfSingleOrder = async (req, res) => {
+  try {
+    // Getting single order
+    const order = await Order.findById(req.params.id).populate([
+      "orderItems.id",
+      "shippingInfo",
+      "paymentInfo",
+      "user",
+    ]);
 
     // If order not found
     if (!order) {
