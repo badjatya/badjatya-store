@@ -214,7 +214,7 @@ exports.userGettingAllOrders = async (req, res) => {
   }
 };
 
-// User getting details pf single orders
+// User getting details of single order
 exports.userGettingDetailsOfSingleOrder = async (req, res) => {
   try {
     // Getting single order created by user
@@ -222,6 +222,35 @@ exports.userGettingDetailsOfSingleOrder = async (req, res) => {
       _id: req.params.id,
       user: req.user._id,
     }).populate(["orderItems.id", "shippingInfo", "paymentInfo"]);
+
+    // If order not found
+    if (!order) {
+      return customError(res, 404, "Order not found");
+    }
+
+    // Response
+    res.json({
+      status: "success",
+      order,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
+
+// User tracking single order
+exports.userTrackingSingleOrder = async (req, res) => {
+  try {
+    // Getting single order created by user
+    const order = await Order.findOne({
+      _id: req.params.id,
+      user: req.user._id,
+    }).select(["orderStatus", "_id"]);
+
+    // If order not found
+    if (!order) {
+      return customError(res, 404, "Order not found");
+    }
 
     // Response
     res.json({
