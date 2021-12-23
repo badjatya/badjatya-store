@@ -42,3 +42,22 @@ exports.addDiscount = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Getting all discounts
+exports.getAllDiscounts = async (req, res) => {
+  try {
+    // Getting all discounts
+    const discounts = await Discount.find({})
+      .sort("-createdAt")
+      .select(["-user", "-description", "-__v", "-updatedAt", "-createdAt"]);
+
+    // Response
+    res.json({
+      status: "success",
+      result: discounts.length,
+      discounts,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
