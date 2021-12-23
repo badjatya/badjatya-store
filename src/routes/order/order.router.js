@@ -8,6 +8,7 @@ const {
   userTrackingSingleOrder,
   getAllOrders,
   getDetailsOfSingleOrder,
+  updateSingleOrder,
 } = require("../../controllers/order/order.controller");
 
 // User middleware
@@ -38,13 +39,18 @@ router
     getAllOrders
   );
 
-// Getting single Orderdetails
+// Getting single Order details
 router
   .route("/:id")
   .get(
     isLoggedIn,
     customRole("admin", "manager", "orderManager"),
     getDetailsOfSingleOrder
+  )
+  .patch(
+    isLoggedIn,
+    customRole("admin", "manager", "orderManager"),
+    updateSingleOrder
   );
 
 module.exports = router;

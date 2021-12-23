@@ -324,3 +324,49 @@ exports.getDetailsOfSingleOrder = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Admin, manager or orderManager can update single order
+exports.updateSingleOrder = async (req, res) => {
+  try {
+    // Getting single order
+    const order = await Order.findById(req.params.id);
+
+    // If order not found
+    if (!order) {
+      return customError(res, 404, "Order not found");
+    }
+
+    // If orderStatus not found
+    if (!req.body.orderStatus) {
+      return customError(res, 400, "orderStatus is required to update");
+    }
+
+    // Destructuring body
+    const orderStatus = req.body.orderStatus;
+
+    // Restricting if order already delivered can not be revered
+    if (order.orderStatus.status === "delivered") {
+      return customError(res, 401, "Order already delivered");
+    }
+
+    // Updating order status if the order is delivered
+    if (orderStatus === "delivered") {
+      order.orderStatus.isDelivered = true;
+      order.orderStatus.deliveredAt = Date.now();
+    }
+
+    // Updating the order status
+    order.orderStatus.status = orderStatus;
+
+    // Saving the order
+    await order.save();
+
+    // Response
+    res.json({
+      status: "success",
+      message: "Order updated successfully",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
