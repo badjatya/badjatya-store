@@ -61,3 +61,24 @@ exports.getAllDiscounts = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Getting single discount
+exports.getSingleDiscount = async (req, res) => {
+  try {
+    // Getting single discount
+    const discount = await Discount.findById(req.params.id);
+
+    // If discount not found
+    if (!discount) {
+      return customError(res, 404, "Discount not found");
+    }
+
+    // Response
+    res.json({
+      status: "success",
+      discount,
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};

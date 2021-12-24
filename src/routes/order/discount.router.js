@@ -4,6 +4,7 @@ const router = require("express").Router();
 const {
   addDiscount,
   getAllDiscounts,
+  getSingleDiscount,
 } = require("../../controllers/order/discount.controller");
 
 // User middleware
@@ -17,6 +18,15 @@ router
     isLoggedIn,
     customRole("admin", "manager", "orderManager"),
     getAllDiscounts
+  );
+
+// Getting, updating and deleting single discount
+router
+  .route("/:id")
+  .get(
+    isLoggedIn,
+    customRole("admin", "manager", "orderManager"),
+    getSingleDiscount
   );
 
 module.exports = router;
