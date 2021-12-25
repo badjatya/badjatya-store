@@ -82,3 +82,38 @@ exports.getSingleDiscount = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Updating single discount
+exports.updateSingleDiscount = async (req, res) => {
+  try {
+    // Getting single discount
+    const discount = await Discount.findById(req.params.id);
+
+    // If discount not found
+    if (!discount) {
+      return customError(res, 404, "Discount not found");
+    }
+
+    // Updating discount
+    await Discount.findByIdAndUpdate(
+      discount._id,
+      {
+        available: req.body.available || discount.available,
+        name: req.body.name || discount.name,
+        description: req.body.description || discount.description,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    // Response
+    res.json({
+      status: "success",
+      message: "Discount updated",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
