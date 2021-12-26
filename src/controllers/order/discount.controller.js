@@ -98,9 +98,10 @@ exports.updateSingleDiscount = async (req, res) => {
     await Discount.findByIdAndUpdate(
       discount._id,
       {
-        available: req.body.available || discount.available,
-        name: req.body.name || discount.name,
-        description: req.body.description || discount.description,
+        available: req.body.available,
+        name: req.body.name,
+        description: req.body.description,
+        user: req.user._id,
       },
       {
         new: true,
