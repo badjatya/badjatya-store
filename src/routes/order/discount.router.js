@@ -6,6 +6,7 @@ const {
   getAllDiscounts,
   getSingleDiscount,
   updateSingleDiscount,
+  deleteSingleDiscount,
 } = require("../../controllers/order/discount.controller");
 
 // User middleware
@@ -33,6 +34,11 @@ router
     isLoggedIn,
     customRole("admin", "manager", "orderManager"),
     updateSingleDiscount
+  )
+  .delete(
+    isLoggedIn,
+    customRole("admin", "manager", "orderManager"),
+    deleteSingleDiscount
   );
 
 module.exports = router;

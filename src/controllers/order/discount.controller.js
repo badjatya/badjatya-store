@@ -118,3 +118,27 @@ exports.updateSingleDiscount = async (req, res) => {
     customError(res, 500, error.message, "error");
   }
 };
+
+// Deleting discount
+exports.deleteSingleDiscount = async (req, res) => {
+  try {
+    // Getting single discount
+    const discount = await Discount.findById(req.params.id);
+
+    // If discount not found
+    if (!discount) {
+      return customError(res, 404, "Discount not found");
+    }
+
+    // Deleting discount
+    await Discount.findByIdAndDelete(discount._id);
+
+    // Response
+    res.json({
+      status: "success",
+      message: "Discount deleted",
+    });
+  } catch (error) {
+    customError(res, 500, error.message, "error");
+  }
+};
