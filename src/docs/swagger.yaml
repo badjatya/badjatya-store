@@ -11,14 +11,6 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
-  - url: "https://badjatya-store.herokuapp.com/api/{Version}"
-    description: Hosted version of the API
-    variables:
-      Version:
-        enum:
-          - v1
-          - v2
-        default: v1
   - url: "{Protocol}://localhost:{Port}/api/{Version}"
     description: Local version of the API
     variables:
@@ -34,6 +26,15 @@ servers:
           - "7000"
           - "8000"
         default: "5000"
+      Version:
+        enum:
+          - v1
+          - v2
+        default: v1
+
+  - url: "https://badjatya-store.herokuapp.com/api/{Version}"
+    description: Hosted version of the API
+    variables:
       Version:
         enum:
           - v1
@@ -5381,6 +5382,162 @@ paths:
                   message:
                     type: string
                     example: Product not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+
+  # * Discount
+  /discount:
+    post:
+      tags:
+        - Discount
+      summary: An Admin, manager or orderManager can create a discount.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - discountPercentage
+                - available
+              properties:
+                name:
+                  type: string
+                  default: New year discount
+                  description: Enter the name of the discount.
+                description:
+                  type: string
+                  default: A new year discount for all the users
+                  description: Enter the description of the discount
+                discountPercentage:
+                  type: number
+                  default: 20
+                  description: Enter the discount percentage
+                available:
+                  type: boolean
+                  default: true
+                  description: Enter is discount available
+      responses:
+        200:
+          description: success, Discount created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  message:
+                    type: string
+                    example: Discount Created
+        400:
+          description: Bad request, A discount must contain name, description, discountPercentage and available.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: A discount must contain name, description, discountPercentage and available.
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+    get:
+      tags:
+        - Discount
+      summary: An Admin, manager or orderManager can get list of discounts.
+      responses:
+        200:
+          description: success, List of discounts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  result:
+                    type: number
+                    example: 5
+                  discounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: 61c9d065565675f4828ca433
+                        name:
+                          type: string
+                          example: New year discount
+                        discountPercentage:
+                          type: number
+                          example: 20
+                        available:
+                          type: boolean
+                          example: true
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
         500:
           description: Internal server error
           content:
