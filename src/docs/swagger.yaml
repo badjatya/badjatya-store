@@ -5551,3 +5551,104 @@ paths:
                   message:
                     type: string
                     example: error message
+
+  /discount/{id}:
+    get:
+      tags:
+        - Discount
+      summary: An Admin, manager or orderManager can get details of single discount
+      parameters:
+        - name: id
+          required: true
+          description: Enter the discount id
+          in: path
+          default: 61c9d065565675f4828ca433
+      responses:
+        200:
+          description: success, Discount details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: success
+                  discount:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: 61c9d065565675f4828ca433
+                      name:
+                        type: string
+                        example: New year discount
+                      description:
+                        type: string
+                        example: New year discount
+                      discountPercentage:
+                        type: number
+                        example: 20
+                      available:
+                        type: boolean
+                        example: true
+                      user:
+                        type: string
+                        example: 61c9d065565675f4828ca433
+                      createdAt:
+                        type: string
+                        format: date
+                      updatedAt:
+                        type: string
+                        format: date
+                      __v:
+                        type: string
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Discount not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Discount not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
