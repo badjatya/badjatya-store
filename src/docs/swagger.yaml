@@ -5572,7 +5572,8 @@ paths:
                 type: object
                 properties:
                   status:
-                    type: success
+                    type: string
+                    example: success
                   discount:
                     type: object
                     properties:
@@ -5602,6 +5603,96 @@ paths:
                         format: date
                       __v:
                         type: string
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+        404:
+          description: Discount not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: Discount not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: error message
+    patch:
+      tags:
+        - Discount
+      summary: An Admin, manager or orderManager can update details of single discount
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: New year discount
+                  description: Enter the name of the discount.
+                description:
+                  type: string
+                  default: A new year discount for all the users
+                  description: Enter the description of the discount
+                available:
+                  type: boolean
+                  default: true
+                  description: Enter is discount available
+      parameters:
+        - name: id
+          required: true
+          description: Enter the discount id
+          in: path
+          default: 61c9d065565675f4828ca433
+      responses:
+        200:
+          description: success, Discount details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
         400:
           description: Bad request
           content:
