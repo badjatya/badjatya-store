@@ -5746,25 +5746,7 @@ paths:
     delete:
       tags:
         - Discount
-      summary: An Admin, manager or orderManager can update details of single discount
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  default: New year discount
-                  description: Enter the name of the discount.
-                description:
-                  type: string
-                  default: A new year discount for all the users
-                  description: Enter the description of the discount
-                available:
-                  type: boolean
-                  default: true
-                  description: Enter is discount available
+      summary: An Admin, manager or orderManager can delete single discount
       parameters:
         - name: id
           required: true
@@ -5773,7 +5755,7 @@ paths:
           default: 61c9d065565675f4828ca433
       responses:
         200:
-          description: success, Discount details
+          description: success, Discount Deleted
           content:
             application/json:
               schema:
@@ -5782,7 +5764,7 @@ paths:
                   status:
                     type: string
                   message:
-                    type: string
+                    type: Discount Deleted
         400:
           description: Bad request
           content:
