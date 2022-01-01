@@ -269,6 +269,25 @@ components:
           type: string
         secureUrl:
           type: string
+    Review:
+      type: object
+      properties:
+        user:
+          type: string
+        product:
+          type: string
+        name:
+          type: string
+        star:
+          type: number
+        comment:
+          type: string
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
 
 paths:
   # User
