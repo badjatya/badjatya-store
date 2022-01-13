@@ -295,6 +295,18 @@ components:
           type: string
         description:
           type: string
+        user:
+          type: string
+        discountPercentage:
+          type: number
+        available:
+          type: boolean
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
 
 paths:
   # User
