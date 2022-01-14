@@ -307,6 +307,25 @@ components:
         updatedAt:
           type: string
           format: date
+    Shipping:
+      type: object
+      properties:
+        phoneNumber:
+          type: string
+        user:
+          type: string
+        alternatePhoneNumber:
+          type: string
+        addressLineOne:
+          type: number
+        addressLineTwo:
+          type: boolean
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
 
 paths:
   # User
