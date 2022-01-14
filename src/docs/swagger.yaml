@@ -311,15 +311,15 @@ components:
       type: object
       properties:
         phoneNumber:
-          type: string
+          type: number
         user:
           type: string
         alternatePhoneNumber:
-          type: string
-        addressLineOne:
           type: number
+        addressLineOne:
+          type: string
         addressLineTwo:
-          type: boolean
+          type: string
         createdAt:
           type: string
           format: date
