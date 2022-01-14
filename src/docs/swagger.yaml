@@ -320,6 +320,12 @@ components:
           type: string
         addressLineTwo:
           type: string
+        landmark:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
         createdAt:
           type: string
           format: date
