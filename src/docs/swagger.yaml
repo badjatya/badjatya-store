@@ -336,6 +336,15 @@ components:
         updatedAt:
           type: string
           format: date
+    Payment:
+      type: object
+      properties:
+        orderId:
+          type: number
+        successId:
+          type: number
+        user:
+          type: string
 
 paths:
   # User
