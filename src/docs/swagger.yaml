@@ -342,7 +342,7 @@ components:
         orderId:
           type: string
         successId:
-          type: number
+          type: string
         user:
           type: string
         createdAt:
