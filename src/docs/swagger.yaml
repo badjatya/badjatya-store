@@ -345,6 +345,12 @@ components:
           type: number
         user:
           type: string
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
 
 paths:
   # User
