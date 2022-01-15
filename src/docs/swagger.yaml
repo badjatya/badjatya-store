@@ -340,7 +340,7 @@ components:
       type: object
       properties:
         orderId:
-          type: number
+          type: string
         successId:
           type: number
         user:
