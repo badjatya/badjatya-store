@@ -351,6 +351,21 @@ components:
         updatedAt:
           type: string
           format: date
+    OrderItem:
+      type: object
+      properties:
+        productName:
+          type: string
+        quantity:
+          type: string
+        thumbnail:
+          type: string
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
 
 paths:
   # User
