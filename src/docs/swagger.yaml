@@ -357,11 +357,11 @@ components:
         productName:
           type: string
         quantity:
-          type: string
+          type: number
         thumbnail:
           type: string
         price:
-          type: string
+          type: number
         product:
           type: string
         createdAt:
