@@ -395,6 +395,13 @@ components:
               format: date
             isDelivered:
               type: boolean
+        orderItems:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
         createdAt:
           type: string
           format: date
