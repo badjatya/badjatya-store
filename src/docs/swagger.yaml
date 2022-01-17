@@ -377,11 +377,11 @@ components:
           type: string
         user:
           type: number
-        thumbnail:
+        paymentInfo:
           type: string
-        price:
+        taxAmount:
           type: number
-        product:
+        shippingAmount:
           type: string
         createdAt:
           type: string
