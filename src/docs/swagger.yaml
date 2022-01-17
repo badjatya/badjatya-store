@@ -383,6 +383,18 @@ components:
           type: number
         shippingAmount:
           type: string
+        totalAmount:
+          type: string
+        orderStatus:
+          type: object
+          properties:
+            status:
+              type: string
+            deliveredAt:
+              type: string
+              format: date
+            isDelivered:
+              type: boolean
         createdAt:
           type: string
           format: date
