@@ -370,6 +370,25 @@ components:
         updatedAt:
           type: string
           format: date
+    Order:
+      type: object
+      properties:
+        shippingInfo:
+          type: string
+        user:
+          type: number
+        thumbnail:
+          type: string
+        price:
+          type: number
+        product:
+          type: string
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
 
 paths:
   # User
