@@ -7,7 +7,7 @@ const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
-const passport = require("passport");
+// const passport = require("passport");
 
 // API DOCS Swagger
 const swaggerDocument = YAML.load("./src/docs/swagger.yaml");
@@ -24,11 +24,11 @@ app.use(
   })
 );
 
-// Passport - Social logins
-const GoogleStrategy = require("./src/passport/google");
-// const FacebookStrategy = require("./src/passport/facebook");
-const GitHubStrategy = require("./src/passport/github");
-app.use(passport.initialize());
+// // Passport - Social logins
+// const GoogleStrategy = require("./src/passport/google");
+// // const FacebookStrategy = require("./src/passport/facebook");
+// const GitHubStrategy = require("./src/passport/github");
+// app.use(passport.initialize());
 
 // Template engine
 app.set("view engine", "ejs");
