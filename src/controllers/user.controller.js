@@ -49,8 +49,6 @@ exports.createUser = async (req, res) => {
 
       // Checking is the user got refer
       if (req.body.referBy) {
-        const referBy = req.body;
-
         // Checking is valid refer
         const referUser = await User.findOne({ referId });
 
@@ -543,25 +541,4 @@ exports.confirmResetPassword = async (req, res) => {
   } catch (error) {
     customError(res, 500, error.message, "error");
   }
-};
-
-exports.socialLogin = async (req, res) => {
-  // Getting token
-  const token = await req.user.getJwtLoginToken();
-
-  // Sending a cookie valid for 2days
-  res.cookie("token", token, {
-    expires: new Date(
-      Date.now() * process.env.COOKIE_TIME * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-  });
-
-  // Sending response
-  res.json({
-    status: "success",
-    token,
-    isVerifiedUser: req.user.isVerifiedUser,
-    user: req.user,
-  });
 };

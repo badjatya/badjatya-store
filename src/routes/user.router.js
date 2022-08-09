@@ -15,50 +15,16 @@ const {
   confirmEmailResendToken,
   forgotPassword,
   confirmResetPassword,
-  socialLogin,
 } = require("../controllers/user.controller");
 
 // User middleware
 const { isLoggedIn } = require("../middlewares/user");
-
-// Lib
-const passport = require("passport");
 
 // * User route
 
 // Local
 router.route("/signup").post(createUser);
 router.route("/login").post(login);
-
-// Google
-router.route("/google").get(
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
-router
-  .route("/google/callback")
-  .get(passport.authenticate("google"), socialLogin);
-
-// Facebook
-router.route("/facebook").get(
-  passport.authenticate("facebook", {
-    scope: ["email"],
-  })
-);
-router
-  .route("/facebook/callback")
-  .get(passport.authenticate("facebook"), socialLogin);
-
-// Github
-router.route("/github").get(
-  passport.authenticate("github", {
-    scope: ["user:email"],
-  })
-);
-router
-  .route("/github/callback")
-  .get(passport.authenticate("github"), socialLogin);
 
 router.route("/email/confirm/resend").get(isLoggedIn, confirmEmailResendToken);
 router.route("/email/confirm/:token").get(confirmEmail);

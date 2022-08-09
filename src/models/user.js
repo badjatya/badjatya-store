@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      // required: [true, "A user must have a email"],
+      required: [true, "A user must have a email"],
       trim: true,
       unique: [true, "A user must have a unique email"],
       lowercase: true,
@@ -50,16 +50,6 @@ const userSchema = new mongoose.Schema(
       secureUrl: String,
       publicId: String,
     },
-    accountCreatedUsing: {
-      type: String,
-      default: "local",
-      required: [true, "User created account should be known"],
-      enum: {
-        values: ["local", "google", "facebook", "github"],
-        message: "Please select from this category",
-      },
-    },
-    socialLoginId: String,
     referId: {
       type: String,
       required: true,
