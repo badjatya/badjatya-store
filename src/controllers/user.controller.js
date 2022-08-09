@@ -4,7 +4,6 @@ const User = require("../models/user");
 // Library
 const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
-const passport = require("passport");
 const { nanoid } = require("nanoid");
 
 // Utils
