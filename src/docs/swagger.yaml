@@ -11,6 +11,14 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
+  - url: "https://badjatya-store.herokuapp.com/api/{Version}"
+    description: Hosted version of the API
+    variables:
+      Version:
+        enum:
+          - v1
+          - v2
+        default: v1
   - url: "{Protocol}://localhost:{Port}/api/{Version}"
     description: Local version of the API
     variables:
@@ -26,15 +34,6 @@ servers:
           - "7000"
           - "8000"
         default: "5000"
-      Version:
-        enum:
-          - v1
-          - v2
-        default: v1
-
-  - url: "https://badjatya-store.herokuapp.com/api/{Version}"
-    description: Hosted version of the API
-    variables:
       Version:
         enum:
           - v1
